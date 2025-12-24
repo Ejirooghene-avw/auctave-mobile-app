@@ -289,24 +289,125 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
+class SignInButtonListData {
+  final String buttonAsset;
+  final String buttonLabel;
+  final VoidCallback onPressed;
+
+  SignInButtonListData({
+    required this.buttonAsset,
+    required this.buttonLabel,
+    required this.onPressed,
+  });
+
+  static List<SignInButtonListData> listOfSignInButtonListData = [
+    SignInButtonListData(
+      buttonAsset: AppAssets.signInWithEmailButtonIcon,
+      buttonLabel: AppTexts.continueWithEmail,
+      onPressed: () {},
+    ),
+    SignInButtonListData(
+      buttonAsset: AppAssets.signInWithGoogleButtonIcon,
+      buttonLabel: AppTexts.continueWithGoogle,
+      onPressed: () {},
+    ),
+    SignInButtonListData(
+      buttonAsset: AppAssets.signInWithAppleButtonIcon,
+      buttonLabel: AppTexts.continueWithApple,
+      onPressed: () {},
+    ),
+    SignInButtonListData(
+      buttonAsset: AppAssets.signInWithFacebookButtonIcon,
+      buttonLabel: AppTexts.continueWithFacebook,
+      onPressed: () {},
+    ),
+  ];
+}
+
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    Widget buildSignInButton({required SignInButtonListData signInButtonData}) {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 8.0),
+        child: AppButton.outlinedIcon(
+          label: signInButtonData.buttonLabel,
+          icon: SvgPicture.asset(signInButtonData.buttonAsset),
+          onPressed: signInButtonData.onPressed,
+        ),
+      );
+    }
+
+    Widget buildSignInButtons() {
+      List<SignInButtonListData> signInButtonListData =
+          SignInButtonListData.listOfSignInButtonListData;
+
+      return Column(
+        children: signInButtonListData.map((signInButtonData) {
+          return buildSignInButton(signInButtonData: signInButtonData);
+        }).toList(),
+      );
+    }
+
+    Widget buildSignInHeader() {
+      return Text(
+        AppTexts.signUpForOctave,
+        style: appTextStyles.kPBA24pxBold.copyWith(
+          color: AppColors.kPBATextPrimary,
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox.shrink(),
         title: SvgPicture.asset(AppAssets.signInAppLogo),
         centerTitle: true,
       ),
+
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: SignUpButtonWithTermsAndPolicy.login(),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(children: [Text("Sign in")]),
+          child: Column(
+            children: [
+              buildSignInHeader(),
+              SizedBox(height: 24.0),
+              buildSignInButtons(),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+//Sign Up -Personal Details
+
+class SignUpPersonalDetailsScreen extends StatelessWidget {
+  const SignUpPersonalDetailsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text("Sign Up Screen - Personal Details")),
+    );
+  }
+}
+
+//Login
+class LoginScreeen extends StatelessWidget {
+  const LoginScreeen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(body: Center(child: Text("Login Screen")));
   }
 }
 
@@ -369,7 +470,7 @@ class _ThreeDotLoaderState extends State<ThreeDotLoader>
   }
 }
 
-enum AppButtonType { primary }
+enum AppButtonType { primary, outlinedIcon }
 
 //AppButton
 class AppButton extends StatelessWidget {
@@ -379,6 +480,8 @@ class AppButton extends StatelessWidget {
   final TextStyle? labelStyle;
   final ButtonStyle? buttonStyle;
 
+  final Widget? buttonIcon;
+
   const AppButton({
     super.key,
     this.appButtonType = AppButtonType.primary,
@@ -386,6 +489,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     required this.labelStyle,
     required this.buttonStyle,
+    this.buttonIcon,
   });
 
   factory AppButton.primary({
@@ -408,6 +512,25 @@ class AppButton extends StatelessWidget {
     );
   }
 
+  factory AppButton.outlinedIcon({
+    VoidCallback? onPressed,
+    required String label,
+    required Widget icon,
+  }) {
+    return AppButton(
+      label: label,
+      appButtonType: AppButtonType.outlinedIcon,
+      onPressed: onPressed,
+      buttonIcon: icon,
+      labelStyle: AppTextStyles().kPBA16pxMedium.copyWith(
+        color: AppColors.kPBABrandBlack,
+      ),
+      buttonStyle: OutlinedButton.styleFrom(
+        padding: EdgeInsets.symmetric(vertical: 18.0),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return switch (appButtonType) {
@@ -419,7 +542,141 @@ class AppButton extends StatelessWidget {
           child: Text(label, style: labelStyle),
         ),
       ),
+      AppButtonType.outlinedIcon => SizedBox(
+        width: double.infinity,
+        child: OutlinedButton.icon(
+          icon: buttonIcon,
+          onPressed: onPressed,
+          style: buttonStyle,
+          label: Text(label, style: labelStyle),
+        ),
+      ),
     };
+  }
+}
+
+class AuthenticationBottomButton extends StatelessWidget {
+  final Widget child;
+  const AuthenticationBottomButton({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(16.0),
+        child: SignUpButtonWithTermsAndPolicy.login(),
+      ),
+    );
+  }
+}
+
+class AppTermsAndPolicies extends StatelessWidget {
+  const AppTermsAndPolicies({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    final TextStyle clickableTextStyle = appTextStyles.kPBA12pxRegular.copyWith(
+      color: AppColors.kPBATextPrimary,
+      decoration: TextDecoration.underline,
+    );
+
+    final TextStyle defaultTextStyle = appTextStyles.kPBA12pxRegular.copyWith(
+      color: AppColors.kPBATextPrimary,
+      decoration: TextDecoration.underline,
+    );
+
+    TextSpan spacing() {
+      return TextSpan(text: " ");
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.5),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text: AppTexts.termsAndPolicy,
+          style: defaultTextStyle,
+          children: [
+            spacing(),
+            TextSpan(
+              text: AppTexts.clickableTermsAndService,
+              style: clickableTextStyle,
+            ),
+            spacing(),
+            TextSpan(text: AppTexts.termsAndPolicyAnd, style: defaultTextStyle),
+            spacing(),
+            TextSpan(
+              text: AppTexts.clickablePrivacyPolicy,
+              style: clickableTextStyle,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
+  final Widget? topWidget;
+  final String label;
+  final VoidCallback onPressed;
+
+  const SignUpButtonWithTermsAndPolicy({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.topWidget,
+  });
+
+  factory SignUpButtonWithTermsAndPolicy.login() {
+    AppTextStyles appTextStyles = AppTextStyles();
+    return SignUpButtonWithTermsAndPolicy(
+      topWidget: Text(
+        AppTexts.alreadyHaveAnAccount,
+        style: appTextStyles.kPBA14pxMedium.copyWith(
+          color: AppColors.kPBATextSecondary,
+        ),
+      ),
+      label: AppTexts.loginButton,
+      onPressed: () {},
+    );
+  }
+
+  factory SignUpButtonWithTermsAndPolicy.createAccount() {
+    return SignUpButtonWithTermsAndPolicy(
+      label: AppTexts.loginButton,
+      onPressed: () {},
+    );
+  }
+
+  factory SignUpButtonWithTermsAndPolicy.sendCode() {
+    return SignUpButtonWithTermsAndPolicy(
+      label: AppTexts.loginButton,
+      onPressed: () {},
+    );
+  }
+
+  factory SignUpButtonWithTermsAndPolicy.verify() {
+    return SignUpButtonWithTermsAndPolicy(
+      label: AppTexts.loginButton,
+      onPressed: () {},
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        topWidget ?? SizedBox.shrink(),
+        SizedBox(height: 12.0),
+        AppButton.primary(label: label, onPressed: onPressed),
+        SizedBox(height: 24.0),
+        AppTermsAndPolicies(),
+      ],
+    );
   }
 }
 
@@ -479,10 +736,33 @@ class AppTexts {
   static const String onBoardingNextButton = "Next";
   static const String onBoardingSignUpButton = "Sign Up";
   static const String onBoardingSkipButton = "Skip";
+
+  //Sign in
+  static const String signUpForOctave = "Sign up for Auctave";
+
+  static const String continueWithEmail = "Continue with Email";
+  static const String continueWithGoogle = "Continue with Google";
+  static const String continueWithApple = "Continue with Apple";
+  static const String continueWithFacebook = "Continue with Facebook";
+
+  static const String alreadyHaveAnAccount = "Already have an account?";
+
+  static const String loginButton = "Log in";
+
+  static const String clickableTermsAndService = "Terms of Service";
+  static const String clickablePrivacyPolicy = "Privacy Policy";
+  static const String termsAndPolicyAnd = "and";
+  static const String termsAndPolicy = "By continuing, you agree to our";
 }
 
 class AppTextStyles {
   TextStyle get _interFont => GoogleFonts.inter();
+
+  // inter | 14
+  TextStyle get kPBA12pxRegular => _interFont.copyWith(
+    fontWeight: FontWeight.w400,
+    fontSize: 12.0,
+  ); // regular
 
   // inter | 14
   TextStyle get kPBA14pxMedium => _interFont.copyWith(
@@ -499,6 +779,10 @@ class AppTextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 16.0,
   ); // regular
+
+  // inter | 24
+  TextStyle get kPBA24pxBold =>
+      _interFont.copyWith(fontWeight: FontWeight.w700, fontSize: 24.0); // bold
 
   // inter | 32
   TextStyle get kPBA32pxMedium => _interFont.copyWith(
