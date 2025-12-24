@@ -292,7 +292,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 class SignInButtonListData {
   final String buttonAsset;
   final String buttonLabel;
-  final VoidCallback onPressed;
+  final void Function(BuildContext context) onPressed;
 
   SignInButtonListData({
     required this.buttonAsset,
@@ -304,22 +304,29 @@ class SignInButtonListData {
     SignInButtonListData(
       buttonAsset: AppAssets.signInWithEmailButtonIcon,
       buttonLabel: AppTexts.continueWithEmail,
-      onPressed: () {},
+      onPressed: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignUpPersonalDetailsScreen(),
+          ),
+        );
+      },
     ),
     SignInButtonListData(
       buttonAsset: AppAssets.signInWithGoogleButtonIcon,
       buttonLabel: AppTexts.continueWithGoogle,
-      onPressed: () {},
+      onPressed: (context) {},
     ),
     SignInButtonListData(
       buttonAsset: AppAssets.signInWithAppleButtonIcon,
       buttonLabel: AppTexts.continueWithApple,
-      onPressed: () {},
+      onPressed: (context) {},
     ),
     SignInButtonListData(
       buttonAsset: AppAssets.signInWithFacebookButtonIcon,
       buttonLabel: AppTexts.continueWithFacebook,
-      onPressed: () {},
+      onPressed: (context) {},
     ),
   ];
 }
@@ -337,7 +344,9 @@ class SignInScreen extends StatelessWidget {
         child: AppButton.outlinedIcon(
           label: signInButtonData.buttonLabel,
           icon: SvgPicture.asset(signInButtonData.buttonAsset),
-          onPressed: signInButtonData.onPressed,
+          onPressed: () {
+            signInButtonData.onPressed(context);
+          },
         ),
       );
     }
@@ -370,7 +379,14 @@ class SignInScreen extends StatelessWidget {
       ),
 
       bottomNavigationBar: AuthenticationBottomButton(
-        child: SignUpButtonWithTermsAndPolicy.login(),
+        child: SignUpButtonWithTermsAndPolicy.login(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreeen()),
+            );
+          },
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -562,10 +578,7 @@ class AuthenticationBottomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsetsGeometry.all(16.0),
-        child: SignUpButtonWithTermsAndPolicy.login(),
-      ),
+      child: Padding(padding: EdgeInsetsGeometry.all(16.0), child: child),
     );
   }
 }
@@ -583,8 +596,7 @@ class AppTermsAndPolicies extends StatelessWidget {
     );
 
     final TextStyle defaultTextStyle = appTextStyles.kPBA12pxRegular.copyWith(
-      color: AppColors.kPBATextPrimary,
-      decoration: TextDecoration.underline,
+      color: AppColors.kPBATextSecondary,
     );
 
     TextSpan spacing() {
@@ -630,7 +642,9 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
     this.topWidget,
   });
 
-  factory SignUpButtonWithTermsAndPolicy.login() {
+  factory SignUpButtonWithTermsAndPolicy.login({
+    required VoidCallback onPressed,
+  }) {
     AppTextStyles appTextStyles = AppTextStyles();
     return SignUpButtonWithTermsAndPolicy(
       topWidget: Text(
@@ -640,7 +654,7 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
         ),
       ),
       label: AppTexts.loginButton,
-      onPressed: () {},
+      onPressed: onPressed,
     );
   }
 
