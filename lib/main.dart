@@ -411,8 +411,43 @@ class SignUpPersonalDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
     return Scaffold(
-      body: Center(child: Text("Sign Up Screen - Personal Details")),
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: SignUpButtonWithTermsAndPolicy.createAccount(),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.welcomeToAuctave,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  AppTexts.createAnAccountToGetStarted,
+                  style: appTextStyles.kPBA16pxRegular.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppFormTextField.fullName(),
+                SizedBox(height: 16.0),
+                AppFormTextField.email(),
+                SizedBox(height: 16.0),
+                AppFormTextField.password(),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -424,6 +459,92 @@ class LoginScreeen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Center(child: Text("Login Screen")));
+  }
+}
+
+// Sign Up - verify number
+class SignUpVerifyPhoneNumberScreen extends StatelessWidget {
+  const SignUpVerifyPhoneNumberScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: SignUpButtonWithTermsAndPolicy.sendCode(),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.verifyPhoneNumber,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  AppTexts.enterYourPhoneNumber,
+                  style: appTextStyles.kPBA16pxRegular.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppFormTextField.phoneNumber(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Sign Up - verify OTP
+class SignUpVerifyOTPScreen extends StatelessWidget {
+  const SignUpVerifyOTPScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: SignUpButtonWithTermsAndPolicy.verify(),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "OTP",
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  "otp Descriptiion",
+                  style: appTextStyles.kPBA16pxRegular.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppOTPField(length: 4),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -633,7 +754,7 @@ class AppTermsAndPolicies extends StatelessWidget {
 class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
   final Widget? topWidget;
   final String label;
-  final VoidCallback onPressed;
+  final Function(BuildContext context) onPressed;
 
   const SignUpButtonWithTermsAndPolicy({
     super.key,
@@ -646,36 +767,51 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
     required VoidCallback onPressed,
   }) {
     AppTextStyles appTextStyles = AppTextStyles();
-    return SignUpButtonWithTermsAndPolicy(
-      topWidget: Text(
-        AppTexts.alreadyHaveAnAccount,
-        style: appTextStyles.kPBA14pxMedium.copyWith(
-          color: AppColors.kPBATextSecondary,
-        ),
+
+    final alreadyHaveAnAccount = Text(
+      AppTexts.alreadyHaveAnAccount,
+      style: appTextStyles.kPBA14pxMedium.copyWith(
+        color: AppColors.kPBATextSecondary,
       ),
+    );
+
+    return SignUpButtonWithTermsAndPolicy(
+      topWidget: alreadyHaveAnAccount,
       label: AppTexts.loginButton,
-      onPressed: onPressed,
+      onPressed: (context) => onPressed,
     );
   }
 
   factory SignUpButtonWithTermsAndPolicy.createAccount() {
     return SignUpButtonWithTermsAndPolicy(
-      label: AppTexts.loginButton,
-      onPressed: () {},
+      label: AppTexts.createAccountButton,
+      onPressed: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SignUpVerifyPhoneNumberScreen(),
+          ),
+        );
+      },
     );
   }
 
   factory SignUpButtonWithTermsAndPolicy.sendCode() {
     return SignUpButtonWithTermsAndPolicy(
-      label: AppTexts.loginButton,
-      onPressed: () {},
+      label: AppTexts.sendCodeButton,
+      onPressed: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SignUpVerifyOTPScreen()),
+        );
+      },
     );
   }
 
   factory SignUpButtonWithTermsAndPolicy.verify() {
     return SignUpButtonWithTermsAndPolicy(
       label: AppTexts.loginButton,
-      onPressed: () {},
+      onPressed: (context) {},
     );
   }
 
@@ -686,10 +822,330 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
       children: [
         topWidget ?? SizedBox.shrink(),
         SizedBox(height: 12.0),
-        AppButton.primary(label: label, onPressed: onPressed),
+        AppButton.primary(
+          label: label,
+          onPressed: () {
+            onPressed(context);
+          },
+        ),
         SizedBox(height: 24.0),
         AppTermsAndPolicies(),
       ],
+    );
+  }
+}
+
+class AppFormTextField extends StatelessWidget {
+  final String label;
+  final String hint;
+  final TextEditingController? editingController;
+  final bool isPasswordFormField;
+  final bool isPhoneNumber;
+
+  const AppFormTextField({
+    super.key,
+    required this.label,
+    required this.hint,
+    this.editingController,
+    this.isPasswordFormField = false,
+    this.isPhoneNumber = false,
+  });
+
+  factory AppFormTextField.fullName({
+    TextEditingController? editingController,
+  }) {
+    return AppFormTextField(
+      label: AppTexts.fullNameTextFieldLabel,
+      hint: AppTexts.fullNameTextFieldHint,
+      editingController: editingController,
+    );
+  }
+
+  factory AppFormTextField.email({TextEditingController? editingController}) {
+    return AppFormTextField(
+      label: AppTexts.emailTextFieldLabel,
+      hint: AppTexts.emailTextFieldHint,
+      editingController: editingController,
+    );
+  }
+
+  factory AppFormTextField.password({
+    TextEditingController? editingController,
+  }) {
+    return AppFormTextField(
+      label: AppTexts.passwordTextFieldLabel,
+      hint: AppTexts.passwordTextFieldHint,
+      editingController: editingController,
+      isPasswordFormField: true,
+    );
+  }
+
+  factory AppFormTextField.phoneNumber({
+    TextEditingController? editingController,
+  }) {
+    return AppFormTextField(
+      label: AppTexts.phoneNumberTextFieldLabel,
+      hint: AppTexts.phoneNumberTextFieldHint,
+      editingController: editingController,
+      isPhoneNumber: true,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: appTextStyles.kPBA14pxMedium.copyWith(
+            color: AppColors.kPBATextPrimary,
+          ),
+        ),
+        SizedBox(height: 8.0),
+        (isPasswordFormField == true)
+            ? AppPasswordTextField(
+                textFieldHint: hint,
+                editingController: editingController,
+              )
+            : (isPhoneNumber == true)
+            ? AppPhoneNumberTextField(
+                textFieldHint: hint,
+                editingController: editingController,
+              )
+            : AppTextField(
+                textFieldHint: hint,
+                editingController: editingController,
+              ),
+      ],
+    );
+  }
+}
+
+class AppTextField extends StatelessWidget {
+  final String? textFieldHint;
+  final TextEditingController? editingController;
+  const AppTextField({super.key, this.textFieldHint, this.editingController});
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    final BorderRadius appTextFieldBorderRadius = BorderRadius.circular(8.0);
+
+    final OutlineInputBorder activeBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1.5, color: AppColors.kPBABrandBlackAccent),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final OutlineInputBorder inactiveBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1, color: AppColors.kPBABrandOutline),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final appTextFieldDecoration = InputDecoration(
+      border: inactiveBorder,
+      enabledBorder: inactiveBorder,
+      focusedBorder: activeBorder,
+      hintText: textFieldHint,
+      hintStyle: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextInactive,
+      ),
+    );
+
+    return TextField(
+      cursorColor: AppColors.kPBABrandBlack,
+      controller: editingController,
+      style: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextPrimary,
+      ),
+      decoration: appTextFieldDecoration,
+    );
+  }
+}
+
+class AppPhoneNumberTextField extends StatelessWidget {
+  final String? textFieldHint;
+  final TextEditingController? editingController;
+  const AppPhoneNumberTextField({
+    super.key,
+    this.textFieldHint,
+    this.editingController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    final BorderRadius appTextFieldBorderRadius = BorderRadius.circular(8.0);
+
+    final OutlineInputBorder activeBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1.5, color: AppColors.kPBABrandBlackAccent),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final OutlineInputBorder inactiveBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1, color: AppColors.kPBABrandOutline),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final appTextFieldDecoration = InputDecoration(
+      border: inactiveBorder,
+      enabledBorder: inactiveBorder,
+      focusedBorder: activeBorder,
+      hintText: textFieldHint,
+      hintStyle: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextInactive,
+      ),
+    );
+
+    return TextField(
+      keyboardType: TextInputType.phone,
+      cursorColor: AppColors.kPBABrandBlack,
+      controller: editingController,
+      style: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextPrimary,
+      ),
+      decoration: appTextFieldDecoration,
+    );
+  }
+}
+
+class AppPasswordTextField extends StatefulWidget {
+  final String? textFieldHint;
+  final TextEditingController? editingController;
+  const AppPasswordTextField({
+    super.key,
+    this.textFieldHint,
+    this.editingController,
+  });
+
+  @override
+  State<AppPasswordTextField> createState() => _AppPasswordTextFieldState();
+}
+
+class _AppPasswordTextFieldState extends State<AppPasswordTextField> {
+  AppTextStyles appTextStyles = AppTextStyles();
+  bool isPasswordVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final BorderRadius appTextFieldBorderRadius = BorderRadius.circular(8.0);
+
+    final OutlineInputBorder activeBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1.5, color: AppColors.kPBABrandBlackAccent),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final OutlineInputBorder inactiveBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1, color: AppColors.kPBABrandOutline),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final appTextFieldDecoration = InputDecoration(
+      border: inactiveBorder,
+      enabledBorder: inactiveBorder,
+      focusedBorder: activeBorder,
+      hintText: widget.textFieldHint,
+      hintStyle: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextInactive,
+      ),
+      suffixIcon: IconButton(
+        onPressed: () {
+          setState(() {
+            isPasswordVisible = !isPasswordVisible;
+          });
+        },
+        icon: Icon(
+          isPasswordVisible == false
+              ? Icons.visibility_outlined
+              : Icons.visibility_off_outlined,
+          color: AppColors.kPBATextInactive,
+        ),
+      ),
+    );
+
+    return TextField(
+      obscureText: !isPasswordVisible,
+      cursorColor: AppColors.kPBABrandBlack,
+      controller: widget.editingController,
+      style: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextPrimary,
+      ),
+      decoration: appTextFieldDecoration,
+    );
+  }
+}
+
+// App OTP Field
+
+class AppOTPField extends StatefulWidget {
+  final int length;
+  final void Function(String otp)? onCompleted;
+
+  const AppOTPField({super.key, this.length = 6, this.onCompleted});
+
+  @override
+  State<AppOTPField> createState() => _AppOTPFieldState();
+}
+
+class _AppOTPFieldState extends State<AppOTPField> {
+  late List<TextEditingController> _controllers;
+  late List<FocusNode> _focusNodes;
+
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(widget.length, (_) => TextEditingController());
+    _focusNodes = List.generate(widget.length, (_) => FocusNode());
+  }
+
+  @override
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    for (final f in _focusNodes) {
+      f.dispose();
+    }
+    super.dispose();
+  }
+
+  void _onChanged(String value, int index) {
+    if (value.isNotEmpty && index < widget.length - 1) {
+      _focusNodes[index + 1].requestFocus();
+    }
+
+    final otp = _controllers.map((c) => c.text).join();
+    if (otp.length == widget.length) {
+      widget.onCompleted?.call(otp);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(widget.length, (index) {
+        return SizedBox(
+          width: 48,
+          child: TextField(
+            controller: _controllers[index],
+            focusNode: _focusNodes[index],
+            keyboardType: TextInputType.number,
+            textAlign: TextAlign.center,
+            maxLength: 1,
+            decoration: const InputDecoration(
+              counterText: '',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (value) => _onChanged(value, index),
+          ),
+        );
+      }),
     );
   }
 }
@@ -706,6 +1162,12 @@ class AppColors {
 
   static const kPBATextPrimary = Color(0xFF1A1A1A);
   static const kPBATextSecondary = Color(0xFF6B6B6B);
+
+  static const kPBABrandOutline = Color(0xFFE5E5E5);
+
+  static const kPBATextInactive = Color(0xFFA5A5A5);
+
+  static const kPBABrandBlackAccent = Color(0xFF1E1E1E);
 }
 
 class AppAssets {
@@ -767,6 +1229,31 @@ class AppTexts {
   static const String clickablePrivacyPolicy = "Privacy Policy";
   static const String termsAndPolicyAnd = "and";
   static const String termsAndPolicy = "By continuing, you agree to our";
+
+  // Sign Up - Personal Details
+  static const String welcomeToAuctave = "Welcome to Auctave";
+  static const String createAnAccountToGetStarted =
+      "Create an account to get started.";
+
+  static const String fullNameTextFieldLabel = "Full Name";
+  static const String emailTextFieldLabel = "Email Address";
+  static const String passwordTextFieldLabel = "Password";
+
+  static const String fullNameTextFieldHint = "Enter your full name";
+  static const String emailTextFieldHint = "Enter your email address";
+  static const String passwordTextFieldHint = "***********";
+
+  static const String createAccountButton = "Create Account";
+
+  // Sign Up - Verify Phone Number
+  static const String verifyPhoneNumber = "Verify phone number";
+  static const String enterYourPhoneNumber =
+      "Enter your phone number so we can send you a quick OTP and confirm it’s really you.";
+
+  static const String phoneNumberTextFieldLabel = "Phone Number";
+  static const String phoneNumberTextFieldHint = "Enter your phone number";
+
+  static const String sendCodeButton = "Send Code";
 }
 
 class AppTextStyles {
@@ -797,6 +1284,8 @@ class AppTextStyles {
   // inter | 24
   TextStyle get kPBA24pxBold =>
       _interFont.copyWith(fontWeight: FontWeight.w700, fontSize: 24.0); // bold
+  TextStyle get kPBA24pxMedium =>
+      _interFont.copyWith(fontWeight: FontWeight.w500, fontSize: 24.0); // bold
 
   // inter | 32
   TextStyle get kPBA32pxMedium => _interFont.copyWith(
