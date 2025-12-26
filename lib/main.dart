@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -512,6 +515,8 @@ class SignUpVerifyOTPScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AppTextStyles appTextStyles = AppTextStyles();
+
+    final String enteredPhoneNumber = "+234 9126454646";
     return Scaffold(
       appBar: AppBar(),
       bottomNavigationBar: AuthenticationBottomButton(
@@ -525,20 +530,60 @@ class SignUpVerifyOTPScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "OTP",
+                  AppTexts.otpVerification,
                   style: appTextStyles.kPBA24pxMedium.copyWith(
                     color: AppColors.kPBATextPrimary,
                   ),
                 ),
                 SizedBox(height: 16.0),
-                Text(
-                  "otp Descriptiion",
-                  style: appTextStyles.kPBA16pxRegular.copyWith(
-                    color: AppColors.kPBATextSecondary,
+                RichText(
+                  text: TextSpan(
+                    text: AppTexts.weJustSendCodeToPhoneNumber,
+                    style: appTextStyles.kPBA16pxRegular.copyWith(
+                      color: AppColors.kPBATextSecondary,
+                    ),
+                    children: [
+                      TextSpan(text: " "),
+                      TextSpan(
+                        text: "$enteredPhoneNumber.",
+                        style: appTextStyles.kPBA16pxRegular.copyWith(
+                          color: AppColors.kPBATextPrimary,
+                        ),
+                      ),
+                      TextSpan(text: "\n"),
+                      TextSpan(
+                        text: AppTexts.enterCodeToVerifyNumber,
+                        style: appTextStyles.kPBA16pxRegular.copyWith(
+                          color: AppColors.kPBABrandBlack,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 32.0),
                 AppOTPField(length: 4),
+                SizedBox(height: 24.0),
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: AppTexts.didNotReceiveOTP,
+                      style: appTextStyles.kPBA14pxMedium.copyWith(
+                        color: AppColors.kPBATextSecondary,
+                      ),
+                      children: [
+                        TextSpan(text: " "),
+                        TextSpan(
+                          text: AppTexts.resendOTPClickableText,
+                          style: appTextStyles.kPBA14pxMedium.copyWith(
+                            color: AppColors.kPBABrandBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -810,8 +855,15 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
 
   factory SignUpButtonWithTermsAndPolicy.verify() {
     return SignUpButtonWithTermsAndPolicy(
-      label: AppTexts.loginButton,
-      onPressed: (context) {},
+      label: AppTexts.verifyButton,
+      onPressed: (context) {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return AppSuccessModalBottomSheet();
+          },
+        );
+      },
     );
   }
 
@@ -1095,12 +1147,17 @@ class AppOTPField extends StatefulWidget {
 class _AppOTPFieldState extends State<AppOTPField> {
   late List<TextEditingController> _controllers;
   late List<FocusNode> _focusNodes;
+  final AppTextStyles appTextStyles = AppTextStyles();
 
   @override
   void initState() {
     super.initState();
     _controllers = List.generate(widget.length, (_) => TextEditingController());
     _focusNodes = List.generate(widget.length, (_) => FocusNode());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _focusNodes.first.requestFocus();
+    });
   }
 
   @override
@@ -1115,8 +1172,14 @@ class _AppOTPFieldState extends State<AppOTPField> {
   }
 
   void _onChanged(String value, int index) {
-    if (value.isNotEmpty && index < widget.length - 1) {
-      _focusNodes[index + 1].requestFocus();
+    if (value.isNotEmpty) {
+      if (index < widget.length - 1) {
+        _focusNodes[index + 1].requestFocus();
+      }
+    }
+
+    if (value.isEmpty && index > 0) {
+      _focusNodes[index - 1].requestFocus();
     }
 
     final otp = _controllers.map((c) => c.text).join();
@@ -1128,24 +1191,138 @@ class _AppOTPFieldState extends State<AppOTPField> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
+
       children: List.generate(widget.length, (index) {
-        return SizedBox(
-          width: 48,
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 8.0),
+          width: 54,
           child: TextField(
             controller: _controllers[index],
             focusNode: _focusNodes[index],
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(1),
+            ],
             maxLength: 1,
-            decoration: const InputDecoration(
+            style: appTextStyles.kPBA28pxMedium.copyWith(
+              color: AppColors.kPBATextPrimary,
+            ),
+            decoration: InputDecoration(
               counterText: '',
-              border: OutlineInputBorder(),
+              contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1.5,
+                  color: AppColors.kPBATextSecondary,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1.5,
+                  color: AppColors.kPBATextSecondary,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  width: 1.5,
+                  color: AppColors.kPBABrandBlackAccent,
+                ),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
             ),
             onChanged: (value) => _onChanged(value, index),
           ),
         );
       }),
+    );
+  }
+}
+
+// App Success Modal Bottom SHEET
+class AppSuccessModalBottomSheet extends StatefulWidget {
+  const AppSuccessModalBottomSheet({super.key});
+
+  @override
+  State<AppSuccessModalBottomSheet> createState() =>
+      _AppSuccessModalBottomSheetState();
+}
+
+class _AppSuccessModalBottomSheetState
+    extends State<AppSuccessModalBottomSheet> {
+  bool isModalSheetLoading = true;
+
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() => isModalSheetLoading = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+    return SafeArea(
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+        decoration: BoxDecoration(
+          color: AppColors.kPBABrandWhite,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: (isModalSheetLoading == true)
+            ? AnimatedContainer(
+                duration: Duration(milliseconds: 800),
+                height: MediaQuery.of(context).size.height * 0.24,
+                child: Center(child: CircularProgressIndicator.adaptive()),
+              )
+            : AnimatedContainer(
+                duration: Duration(milliseconds: 800),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(AppAssets.suceessModalBottomSheetIcon),
+                    SizedBox(height: 16.0),
+                    Text(
+                      AppTexts.youAreIn,
+                      style: appTextStyles.kPBA20pxMedium.copyWith(
+                        color: AppColors.kPBATextPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      AppTexts.yourAuctaveAccountIsLive,
+                      style: appTextStyles.kPBA14pxRegular.copyWith(
+                        color: AppColors.kPBATextSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 24.0),
+                    AppButton.primary(
+                      label: AppTexts.closeButton,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+      ),
     );
   }
 }
@@ -1193,6 +1370,9 @@ class AppAssets {
       "assets/icons/sign_in_with_email_button_icon.svg";
 
   static const String signInAppLogo = "assets/logos/sign_in_app_logo.svg";
+
+  static const String suceessModalBottomSheetIcon =
+      "assets/icons/success_bottom_sheet_icon_BPA.svg";
 }
 
 class AppTexts {
@@ -1254,6 +1434,25 @@ class AppTexts {
   static const String phoneNumberTextFieldHint = "Enter your phone number";
 
   static const String sendCodeButton = "Send Code";
+
+  // Sign Up - Verify OTP
+  static const String otpVerification = "OTP verification";
+  static const String weJustSendCodeToPhoneNumber =
+      "We just sent a 4-digit code to";
+  static const String enterCodeToVerifyNumber =
+      "Enter it here to verify your number and continue.";
+
+  static const String didNotReceiveOTP = "Didn’t receive the OTP?";
+  static const String resendOTPClickableText = "Resend OTP";
+
+  static const String verifyButton = "Verify";
+
+  // signUp Process Sucess
+  static const String youAreIn = "You’re In! 🎉";
+  static const String yourAuctaveAccountIsLive =
+      "Your Auctave account’s live. Jump in and bid on something that catches your eye or list your first item.";
+
+  static const String closeButton = "Close";
 }
 
 class AppTextStyles {
@@ -1271,6 +1470,11 @@ class AppTextStyles {
     fontSize: 14.0,
   ); // medium
 
+  TextStyle get kPBA14pxRegular => _interFont.copyWith(
+    fontWeight: FontWeight.w400,
+    fontSize: 14.0,
+  ); // regular
+
   // inter | 16
   TextStyle get kPBA16pxMedium => _interFont.copyWith(
     fontWeight: FontWeight.w500,
@@ -1281,11 +1485,24 @@ class AppTextStyles {
     fontSize: 16.0,
   ); // regular
 
+  // inter | 20
+  TextStyle get kPBA20pxMedium => _interFont.copyWith(
+    fontWeight: FontWeight.w500,
+    fontSize: 20.0,
+  ); // medium
+
   // inter | 24
   TextStyle get kPBA24pxBold =>
       _interFont.copyWith(fontWeight: FontWeight.w700, fontSize: 24.0); // bold
-  TextStyle get kPBA24pxMedium =>
-      _interFont.copyWith(fontWeight: FontWeight.w500, fontSize: 24.0); // bold
+  TextStyle get kPBA24pxMedium => _interFont.copyWith(
+    fontWeight: FontWeight.w500,
+    fontSize: 24.0,
+  ); // medium
+
+  // inter | 24
+
+  TextStyle get kPBA28pxMedium =>
+      _interFont.copyWith(fontWeight: FontWeight.w500, fontSize: 28.0); // bold
 
   // inter | 32
   TextStyle get kPBA32pxMedium => _interFont.copyWith(
