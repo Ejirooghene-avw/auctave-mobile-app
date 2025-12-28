@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MainApp());
@@ -14,7 +15,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: SplashScreen());
+    // return MaterialApp(home: SplashScreen());
+    return MaterialApp(home: HomeScreen());
+  }
+}
+
+// general functions
+
+class AppUtil {
+  static String formatNaira(num amount) {
+    final formatter = NumberFormat('#,##0', 'en_NG');
+    return '₦${formatter.format(amount)}';
   }
 }
 
@@ -45,6 +56,39 @@ class OnBoardingPageViewContent {
       imageAsset: AppAssets.onboardingCarouselWinSafeTrades,
       heading: AppTexts.onboardingHeadingTextSlide3,
       subtitle: AppTexts.onboardingSubTitleTextSlide3,
+    ),
+  ];
+}
+
+class Auction {
+  final String imageUrl;
+  final String auctionTitle;
+  final bool isAuctionLive;
+  final double currentBid;
+  final double timeLeftInSeconds;
+
+  Auction({
+    required this.imageUrl,
+    required this.auctionTitle,
+    required this.isAuctionLive,
+    required this.currentBid,
+    required this.timeLeftInSeconds,
+  });
+
+  static List<Auction> listOfFeaturedAuctions = [
+    Auction(
+      imageUrl: DummyAssets.dummyFeatureAuction1,
+      auctionTitle: DummyData.dummyFeatureAuction1Title,
+      isAuctionLive: true,
+      currentBid: DummyData.dummyFeatureAuction1Price,
+      timeLeftInSeconds: DummyData.dummyFeatureAuction1TimeLeftInSeconds,
+    ),
+    Auction(
+      imageUrl: DummyAssets.dummyFeatureAuction2,
+      auctionTitle: DummyData.dummyFeatureAuction2Title,
+      isAuctionLive: true,
+      currentBid: DummyData.dummyFeatureAuction2Price,
+      timeLeftInSeconds: DummyData.dummyFeatureAuction2TimeLeftInSeconds,
     ),
   ];
 }
@@ -118,7 +162,181 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: Center(child: Text("Home Screen")));
+    AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
+        title: Row(
+          children: [
+            CircleAvatar(
+              radius: 20.0,
+              foregroundImage: AssetImage(DummyAssets.dummyProfilePicture),
+            ),
+            SizedBox(width: 12.0),
+            Text(
+              [
+                AppTexts.heyGreeting,
+                DummyData.dummyGreetingUsername,
+                AppTexts.waveGreeting,
+              ].join(" "),
+              style: appTextStyles.kPBA16pxMedium.copyWith(
+                color: AppColors.kPBATextPrimary,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: 16.0),
+            child: SvgPicture.asset(AppAssets.notificationIcon),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0).copyWith(top: 12.0),
+            child: Column(
+              children: [
+                // Search And Filter
+                Row(
+                  children: [
+                    Expanded(child: AppSearchTextField()),
+                    SizedBox(height: 12.0),
+                    IconButton(
+                      onPressed: () {},
+                      icon: SvgPicture.asset(AppAssets.filterIcon),
+                    ),
+                  ],
+                ),
+                // Featured Actions Header - with viewAll Button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppTexts.featuredAuctionsHeading,
+                      style: appTextStyles.kPBA20pxMedium.copyWith(
+                        color: AppColors.kPBATextPrimary,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        AppTexts.viewAllButton,
+                        style: appTextStyles.kPBA14pxMedium.copyWith(
+                          color: AppColors.kPBABrandAccent600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Featured Actions List
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: Auction.listOfFeaturedAuctions.map((
+                      featuredAuction,
+                    ) {
+                      return ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: 260.0,
+                          minHeight: 216,
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.only(right: 24.0),
+                          width: 260.0,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 142,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  image: DecorationImage(
+                                    image: AssetImage(featuredAuction.imageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 12.0),
+                              Text(
+                                featuredAuction.auctionTitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: appTextStyles.kPBA16pxRegular.copyWith(
+                                  color: AppColors.kPBATextPrimary,
+                                ),
+                              ),
+                              SizedBox(height: 8.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        AppUtil.formatNaira(
+                                          featuredAuction.currentBid,
+                                        ),
+                                        style: appTextStyles.kPBA20pxMedium
+                                            .copyWith(
+                                              color: AppColors
+                                                  .kPBABrandTertiary500,
+                                            ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            AppAssets.pbaTagIcon,
+                                          ),
+                                          SizedBox(width: 4.0),
+                                          Text(
+                                            AppTexts.currentBid,
+                                            style: appTextStyles.kPBA12pxRegular
+                                                .copyWith(
+                                                  color: AppColors
+                                                      .kPBATextSecondary,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(AppAssets.pbaClockIcon),
+                                      Text(
+                                        "${featuredAuction.timeLeftInSeconds}s",
+                                        style: appTextStyles.kPBA14pxRegular
+                                            .copyWith(
+                                              color:
+                                                  AppColors.kPBAStatesError500,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+                //
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -1382,6 +1600,66 @@ class AppTextField extends StatelessWidget {
   }
 }
 
+class AppSearchTextField extends StatelessWidget {
+  final String? textFieldHint;
+  final TextEditingController? editingController;
+  const AppSearchTextField({
+    super.key,
+    this.textFieldHint = AppTexts.searchAuctionsOrItems,
+    this.editingController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+
+    final BorderRadius appTextFieldBorderRadius = BorderRadius.circular(8.0);
+
+    final OutlineInputBorder activeBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1.5, color: AppColors.kPBABrandBlackAccent),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final OutlineInputBorder inactiveBorder = OutlineInputBorder(
+      borderSide: BorderSide(width: 1, color: AppColors.kPBABrandOutline),
+      borderRadius: appTextFieldBorderRadius,
+    );
+
+    final appTextFieldDecoration = InputDecoration(
+      border: inactiveBorder,
+      enabledBorder: inactiveBorder,
+      focusedBorder: activeBorder,
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 8.0,
+        vertical: 10.0,
+      ).copyWith(left: 10.0),
+      hintText: textFieldHint,
+      hintStyle: appTextStyles.kPBA16pxRegular.copyWith(
+        color: AppColors.kPBATextInactive,
+      ),
+      prefixIcon: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8.0,
+          vertical: 10.0,
+        ).copyWith(right: 0.0),
+        child: SvgPicture.asset(AppAssets.pbaSearchIcon),
+      ),
+    );
+
+    return SizedBox(
+      height: 40.0,
+      child: TextField(
+        cursorColor: AppColors.kPBABrandBlack,
+        controller: editingController,
+        style: appTextStyles.kPBA16pxRegular.copyWith(
+          color: AppColors.kPBATextPrimary,
+        ),
+        decoration: appTextFieldDecoration,
+      ),
+    );
+  }
+}
+
 class AppPhoneNumberTextField extends StatelessWidget {
   final String? textFieldHint;
   final TextEditingController? editingController;
@@ -1788,6 +2066,9 @@ class AppColors {
 
   static const kPBABrandBlack = Color(0xFF000000);
   static const kPBABrandWhite = Color(0xFFFFFFFF);
+  static const kPBABrandTertiary500 = Color(0xFF2D5DDC);
+
+  static const kPBAStatesError500 = Color(0xFFDC2626);
 
   static const kPBATextPrimary = Color(0xFF1A1A1A);
   static const kPBATextSecondary = Color(0xFF6B6B6B);
@@ -1825,6 +2106,15 @@ class AppAssets {
 
   static const String suceessModalBottomSheetIcon =
       "assets/icons/success_bottom_sheet_icon_BPA.svg";
+
+  // homescreen
+  static const String notificationIcon = "assets/icons/notification_icon.svg";
+  static const String filterIcon = "assets/icons/filter_icon.svg";
+  static const String pbaSearchIcon = "assets/icons/PBA_search_icon.svg";
+  static const String pbaTagIcon = "assets/icons/PBA_tag.svg";
+  static const String pbaClockIcon = "assets/icons/PBA_clock.svg";
+  static const String pbaOptionIcon = "assets/icons/PBA_option.svg";
+  static const String liveBadge = "assets/icons/live_badge.svg";
 }
 
 class AppTexts {
@@ -1941,6 +2231,41 @@ class AppTexts {
       "You’re all set. Use your new password to log in and get back to the auctions.";
 
   static const String backToLoginButton = "Back to Log in";
+
+  // Home Screen
+  static const String heyGreeting = "Hey";
+  static const String waveGreeting = "👋";
+  static const String searchAuctionsOrItems = "Search auctions or items...";
+
+  static const String featuredAuctionsHeading = "Featured Auctions";
+  static const String viewAllButton = "View all";
+
+  static const String currentBid = "Current bid";
+  static const String live = "LIVE";
+}
+
+class DummyAssets {
+  static const dummyProfilePicture = "assets/dummy/dummy_profile_image.png";
+  static const dummyFeatureAuction1 =
+      "assets/dummy/dummy_feature_auction_1.png";
+  static const dummyFeatureAuction2 =
+      "assets/dummy/dummy_feature_auction_2.png";
+}
+
+class DummyData {
+  static const String dummyGreetingUsername = "Japheth";
+
+  static const String dummyFeatureAuction1Title =
+      "Solid Oak Classic Dining Chair";
+
+  static const String dummyFeatureAuction2Title =
+      "Official UEFA Champions League 2015/2016 Final Matchball";
+
+  static const double dummyFeatureAuction1Price = 60400;
+  static const double dummyFeatureAuction2Price = 1500000;
+
+  static const double dummyFeatureAuction1TimeLeftInSeconds = 10;
+  static const double dummyFeatureAuction2TimeLeftInSeconds = 10;
 }
 
 class AppTextStyles {
