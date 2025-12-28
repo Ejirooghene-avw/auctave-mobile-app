@@ -382,14 +382,7 @@ class SignInScreen extends StatelessWidget {
       ),
 
       bottomNavigationBar: AuthenticationBottomButton(
-        child: SignUpButtonWithTermsAndPolicy.login(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginScreeen()),
-            );
-          },
-        ),
+        child: SignUpButtonWithTermsAndPolicy.login(),
       ),
       body: SafeArea(
         child: Padding(
@@ -461,7 +454,113 @@ class LoginScreeen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Login Screen")));
+    AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsetsGeometry.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.welcomeBack,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  AppTexts.loginToKeepBidding,
+                  style: appTextStyles.kPBA16pxMedium.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppFormTextField.email(),
+                SizedBox(height: 16.0),
+                AppFormTextField.password(),
+                SizedBox(height: 8.0),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ResetPasswordScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      AppTexts.forgotPasswordClickableText,
+                      style: appTextStyles.kPBA16pxMedium.copyWith(
+                        color: AppColors.kPBABrandAccent600,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 40.0),
+                AppButton.primary(
+                  label: AppTexts.loginButton,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
+                  },
+                ),
+                SizedBox(height: 12.0),
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      style: appTextStyles.kPBA14pxRegular.copyWith(
+                        color: AppColors.kPBATextSecondary,
+                      ),
+                      text: AppTexts.dontHaveAnAccount,
+                      children: [
+                        TextSpan(text: " "),
+                        TextSpan(
+                          text: AppTexts.signUpClickableText,
+                          style: appTextStyles.kPBA14pxMedium.copyWith(
+                            color: AppColors.kPBABrandBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 72.0),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    AppTexts.orContinueWith,
+                    style: appTextStyles.kPBA14pxRegular.copyWith(
+                      color: AppColors.kPBATextSecondary,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: AppIconButton.google()),
+                    SizedBox(width: 16.0),
+                    Expanded(child: AppIconButton.apple()),
+                    SizedBox(width: 16.0),
+                    Expanded(child: AppIconButton.facebook()),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -593,6 +692,207 @@ class SignUpVerifyOTPScreen extends StatelessWidget {
   }
 }
 
+// Reset Password
+class ResetPasswordScreen extends StatelessWidget {
+  const ResetPasswordScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: AppButton.primary(
+          label: AppTexts.sendCodeButton,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ResetPasswordVerifyOTPScreen(),
+              ),
+            );
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.forgotYourPasswordHeader,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  AppTexts.noStressEnterYourEmail,
+                  style: appTextStyles.kPBA16pxRegular.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppFormTextField.email(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Reset Password - Verify OTP
+class ResetPasswordVerifyOTPScreen extends StatelessWidget {
+  const ResetPasswordVerifyOTPScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTextStyles appTextStyles = AppTextStyles();
+
+    final String enteredEmailAddress = "ambrose@gmail.com";
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: AppButton.primary(
+          label: AppTexts.verifyButton,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NewPasswordScreen()),
+            );
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.enterYourCode,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                RichText(
+                  text: TextSpan(
+                    text: AppTexts.weJustSendCodeToEmail,
+                    style: appTextStyles.kPBA16pxRegular.copyWith(
+                      color: AppColors.kPBATextSecondary,
+                    ),
+                    children: [
+                      TextSpan(text: " "),
+                      TextSpan(
+                        text: "$enteredEmailAddress.",
+                        style: appTextStyles.kPBA16pxRegular.copyWith(
+                          color: AppColors.kPBATextPrimary,
+                        ),
+                      ),
+                      TextSpan(text: "\n"),
+                      TextSpan(
+                        text: AppTexts.enterCodeToVerifyEmail,
+                        style: appTextStyles.kPBA16pxRegular.copyWith(
+                          color: AppColors.kPBABrandBlack,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppOTPField(length: 4),
+                SizedBox(height: 24.0),
+                Align(
+                  alignment: Alignment.center,
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: AppTexts.didNotReceiveOTP,
+                      style: appTextStyles.kPBA14pxMedium.copyWith(
+                        color: AppColors.kPBATextSecondary,
+                      ),
+                      children: [
+                        TextSpan(text: " "),
+                        TextSpan(
+                          text: AppTexts.resendOTPClickableText,
+                          style: appTextStyles.kPBA14pxMedium.copyWith(
+                            color: AppColors.kPBABrandBlack,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// New Password
+class NewPasswordScreen extends StatelessWidget {
+  const NewPasswordScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final AppTextStyles appTextStyles = AppTextStyles();
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: AuthenticationBottomButton(
+        child: AppButton.primary(
+          label: AppTexts.resetPasswordButton,
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return AppSuccessModalBottomSheetPasswordUpdate();
+              },
+            );
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppTexts.setANewPassword,
+                  style: appTextStyles.kPBA24pxMedium.copyWith(
+                    color: AppColors.kPBATextPrimary,
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  AppTexts.createAFreshPasswordYouWillRemember,
+                  style: appTextStyles.kPBA16pxRegular.copyWith(
+                    color: AppColors.kPBATextSecondary,
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                AppFormTextField.newPassword(),
+                SizedBox(height: 16.0),
+                AppFormTextField.confirmNewPassword(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 //Widgets
 //ThreeDotLoader
 class ThreeDotLoader extends StatefulWidget {
@@ -648,6 +948,44 @@ class _ThreeDotLoaderState extends State<ThreeDotLoader>
           },
         );
       }),
+    );
+  }
+}
+
+//AppIconButton
+class AppIconButton extends StatelessWidget {
+  final Widget icon;
+  const AppIconButton({super.key, required this.icon});
+
+  factory AppIconButton.google() {
+    return AppIconButton(
+      icon: SvgPicture.asset(AppAssets.signInWithGoogleButtonIcon),
+    );
+  }
+
+  factory AppIconButton.facebook() {
+    return AppIconButton(
+      icon: SvgPicture.asset(AppAssets.signInWithFacebookButtonIcon),
+    );
+  }
+
+  factory AppIconButton.apple() {
+    return AppIconButton(
+      icon: SvgPicture.asset(AppAssets.signInWithAppleButtonIcon),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: () {},
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: icon,
+        ),
+      ),
     );
   }
 }
@@ -808,9 +1146,7 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
     this.topWidget,
   });
 
-  factory SignUpButtonWithTermsAndPolicy.login({
-    required VoidCallback onPressed,
-  }) {
+  factory SignUpButtonWithTermsAndPolicy.login() {
     AppTextStyles appTextStyles = AppTextStyles();
 
     final alreadyHaveAnAccount = Text(
@@ -823,7 +1159,12 @@ class SignUpButtonWithTermsAndPolicy extends StatelessWidget {
     return SignUpButtonWithTermsAndPolicy(
       topWidget: alreadyHaveAnAccount,
       label: AppTexts.loginButton,
-      onPressed: (context) => onPressed,
+      onPressed: (context) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreeen()),
+        );
+      },
     );
   }
 
@@ -940,6 +1281,28 @@ class AppFormTextField extends StatelessWidget {
       hint: AppTexts.phoneNumberTextFieldHint,
       editingController: editingController,
       isPhoneNumber: true,
+    );
+  }
+
+  factory AppFormTextField.newPassword({
+    TextEditingController? editingController,
+  }) {
+    return AppFormTextField(
+      label: AppTexts.newPasswordTextFieldLabel,
+      hint: AppTexts.passwordTextFieldHint,
+      editingController: editingController,
+      isPasswordFormField: true,
+    );
+  }
+
+  factory AppFormTextField.confirmNewPassword({
+    TextEditingController? editingController,
+  }) {
+    return AppFormTextField(
+      label: AppTexts.confirmNewPasswordTextFieldLabel,
+      hint: AppTexts.passwordTextFieldHint,
+      editingController: editingController,
+      isPasswordFormField: true,
     );
   }
 
@@ -1244,6 +1607,95 @@ class _AppOTPFieldState extends State<AppOTPField> {
 }
 
 // App Success Modal Bottom SHEET
+class AppSuccessModalBottomSheetPasswordUpdate extends StatefulWidget {
+  const AppSuccessModalBottomSheetPasswordUpdate({super.key});
+
+  @override
+  State<AppSuccessModalBottomSheetPasswordUpdate> createState() =>
+      _AppSuccessModalBottomSheetPasswordUpdateState();
+}
+
+class _AppSuccessModalBottomSheetPasswordUpdateState
+    extends State<AppSuccessModalBottomSheetPasswordUpdate> {
+  bool isModalSheetLoading = true;
+
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer(const Duration(seconds: 4), () {
+      if (mounted) {
+        setState(() => isModalSheetLoading = false);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    AppTextStyles appTextStyles = AppTextStyles();
+    return SafeArea(
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+        decoration: BoxDecoration(
+          color: AppColors.kPBABrandWhite,
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: (isModalSheetLoading == true)
+            ? AnimatedContainer(
+                duration: Duration(milliseconds: 800),
+                height: MediaQuery.of(context).size.height * 0.24,
+                child: Center(child: CircularProgressIndicator.adaptive()),
+              )
+            : AnimatedContainer(
+                duration: Duration(milliseconds: 800),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(AppAssets.suceessModalBottomSheetIcon),
+                    SizedBox(height: 16.0),
+                    Text(
+                      AppTexts.passwordUpdated,
+                      style: appTextStyles.kPBA20pxMedium.copyWith(
+                        color: AppColors.kPBATextPrimary,
+                      ),
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      AppTexts.youAreAllSet,
+                      style: appTextStyles.kPBA14pxRegular.copyWith(
+                        color: AppColors.kPBATextSecondary,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 24.0),
+                    AppButton.primary(
+                      label: AppTexts.backToLoginButton,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreeen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+// App Success Modal Bottom SHEET
 class AppSuccessModalBottomSheet extends StatefulWidget {
   const AppSuccessModalBottomSheet({super.key});
 
@@ -1453,6 +1905,42 @@ class AppTexts {
       "Your Auctave account’s live. Jump in and bid on something that catches your eye or list your first item.";
 
   static const String closeButton = "Close";
+
+  // Login
+  static const String welcomeBack = "Welcome back";
+  static const String loginToKeepBidding =
+      "Log in to keep bidding, listing, and winning on Auctave.";
+
+  static const String dontHaveAnAccount = "Don't have an account?";
+  static const String signUpClickableText = "Sign Up";
+  static const String forgotPasswordClickableText = "Forgot Password?";
+  static const String orContinueWith = "or continue with";
+
+  // Reset Password
+  static const String forgotYourPasswordHeader = "Forgot your password?";
+  static const String noStressEnterYourEmail =
+      "No stress. Enter your email and we’ll send you a one-time code to reset it.";
+
+  // Reset Password - Verify OTP
+  static const String enterYourCode = "Enter your code";
+  static const String weJustSendCodeToEmail = "We just sent a code to";
+  static const String enterCodeToVerifyEmail =
+      "Type it in here to confirm and move on.";
+
+  // New Password
+  static const String setANewPassword = "Set a new password";
+  static const String createAFreshPasswordYouWillRemember =
+      "Create a fresh password you will remember. Enter it twice to confirm.";
+  static const String newPasswordTextFieldLabel = "New Password";
+  static const String confirmNewPasswordTextFieldLabel = "Confirm New Password";
+  static const String resetPasswordButton = "Reset Password";
+
+  // Success Modal BottomSheet | Password Update
+  static const String passwordUpdated = "Password Updated!";
+  static const String youAreAllSet =
+      "You’re all set. Use your new password to log in and get back to the auctions.";
+
+  static const String backToLoginButton = "Back to Log in";
 }
 
 class AppTextStyles {
