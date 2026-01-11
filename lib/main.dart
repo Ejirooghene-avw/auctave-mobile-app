@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: PaymentScreen());
+    return MaterialApp(home: BvnVerificationScreen());
   }
 }
 
@@ -4865,3 +4865,292 @@ class PaymentScreen extends StatelessWidget {
 }
 
 // Payment Screen | End
+
+// Wallet Screen | Start
+
+class WalletScreen extends StatelessWidget {
+  const WalletScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    bool isWalletActivated = true;
+    bool isWalletBalanceLow = true;
+    bool isTransactionHistoryEmpty = true;
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(
+          "Wallet",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w700,
+            fontSize: 20.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+        actions: isWalletActivated == true
+            ? [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+
+                  child: SvgPicture.asset("assets/icons/PBA_info.svg"),
+                ),
+              ]
+            : [],
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: isWalletActivated == false
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SvgPicture.asset("assets/icons/PBA_wallet.svg"),
+                      SizedBox(height: 16.0),
+                      Text(
+                        "Activate your wallet",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20.0,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      SizedBox(height: 8.0),
+                      Text(
+                        "You need to verify your identity before you can fund, withdraw, or use your virtual wallet.",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.0,
+                          color: Color(0xFF6B6B6B),
+                        ),
+                      ),
+                      SizedBox(height: 28.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF000000),
+                                foregroundColor: Color(0xFFFFFFFF),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24.0,
+                                  vertical: 12.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                //TODO: Implement Start Verification function
+                              },
+                              child: Text(
+                                "Start Verification",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12.0),
+                          Expanded(
+                            child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Color(0xFF000000),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24.0,
+                                  vertical: 12.0,
+                                ),
+                              ),
+                              onPressed: () {
+                                // TODO: Implement Back to home function
+                              },
+                              child: Text(
+                                "Back to Home",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 20.0,
+                        vertical: 32.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFC4F03B),
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "Available Balance",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15.0,
+                                  color: Color(0xFF1E1E1E),
+                                ),
+                              ),
+                              SizedBox(width: 6.0),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.visibility_off,
+                                  color: Color(0xFF1E1E1E),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "₦0.00",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 32.0,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 16.0),
+
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF000000),
+                              foregroundColor: Color(0xFFFFFFFF),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                                vertical: 12.0,
+                              ),
+                            ),
+                            onPressed: () {},
+                            label: Text(
+                              "Fund Wallet",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+
+                            icon: SvgPicture.asset("assets/icons/PBA_plus.svg"),
+                          ),
+                        ),
+                        SizedBox(width: 12.0),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              disabledBackgroundColor: Color(0xFFEEEEEE),
+                              disabledForegroundColor: Color(0xFFA5A5A5),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24.0,
+                                vertical: 12.0,
+                              ),
+                            ),
+                            onPressed: isWalletBalanceLow == true
+                                ? null
+                                : () {},
+                            label: Text(
+                              "Withdraw",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16.0,
+                              ),
+                            ),
+
+                            icon: SvgPicture.asset(
+                              "assets/icons/diagonal_arrow.svg",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 40.0),
+
+                    Text(
+                      "Transactions",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 20.0,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                    ),
+
+                    isTransactionHistoryEmpty == true
+                        ? Expanded(
+                            child: Column(
+                              children: [
+                                Spacer(),
+
+                                SvgPicture.asset("assets/icons/PBA_empty.svg"),
+                                SizedBox(height: 16.0),
+                                Text(
+                                  "No transactions yet",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20.0,
+                                    color: Color(0xFF1A1A1A),
+                                  ),
+                                ),
+                                SizedBox(height: 8.0),
+                                Text(
+                                  "Your wallet is active. You will see your payments and withdrawals here once you start using it.",
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.0,
+                                    color: Color(0xFF6B6B6B),
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                          )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+// Wallet Screen | End
+
+// BVN Verification Screen | Start
+
+class BvnVerificationScreen extends StatelessWidget {
+  const BvnVerificationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+// BVN Verfication Screen | End
+
+// Confirm BVN Details Screen | Start
+
+// Confirm BVN Details Screen | End
+
+// Add Bank Account Screen | Start
+
+// Add Bank Account  Screen | End
