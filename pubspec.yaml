@@ -24,6 +24,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/icons/filter_categories_icons/
+    - assets/icons/my_bids/
     - assets/illustrations/
     - assets/logos/
     - assets/dummy/

@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: AuctionProductScreen());
+    return MaterialApp(home: MyBidsScreen());
   }
 }
 
@@ -3342,13 +3342,1207 @@ class _FilterCategoriesProductsScreenState
 
 // Auction Product Screen | Start
 
-class AuctionProductScreen extends StatelessWidget {
+class AuctionProductScreen extends StatefulWidget {
   const AuctionProductScreen({super.key});
 
   @override
+  State<AuctionProductScreen> createState() => _AuctionProductScreenState();
+}
+
+class _AuctionProductScreenState extends State<AuctionProductScreen> {
+  String formatNaira(int amount) {
+    if (amount >= 1_000_000) {
+      final value = amount / 1_000_000;
+
+      final formatted = value % 1 == 0
+          ? value.toInt().toString()
+          : value.toStringAsFixed(1);
+
+      return '₦${formatted}m';
+    }
+
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return '₦${formatter.format(amount)}';
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        forceMaterialTransparency: true,
+        backgroundColor: Colors.transparent,
+        leading: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16.0,
+            vertical: 6.0,
+          ).copyWith(right: 8.0),
+          child: SvgPicture.asset("assets/icons/product_details_back_icon.svg"),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SvgPicture.asset(
+              "assets/icons/product_details_save_icon.svg",
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        top: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              // TODO: use pageView so we can work with multiple pictures
+              height: 289.0,
+              width: double.infinity,
+              padding: EdgeInsets.only(bottom: 12.0),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                image: DecorationImage(
+                  image: AssetImage(
+                    "assets/dummy/dummy_product_details_image.png",
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return Container(
+                    height: 8.0,
+                    width: (index == 0) ? 20.0 : 8.0,
+                    margin: EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.0),
+                      color: Color(0xFFEEEEEE),
+                    ),
+                  );
+                }),
+              ),
+            ),
+
+            SizedBox(height: 16.0),
+
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 9,
+                          vertical: 6.0,
+                        ),
+                        decoration: BoxDecoration(
+                          border: BoxBorder.all(color: Color(0xFF6B6B6B)),
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        child: Text(
+                          "Real Estate",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SvgPicture.asset("assets/icons/PBA_location.svg"),
+                          SizedBox(width: 4.0),
+                          Text(
+                            "Ibadan, Oyo State.",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF6B6B6B),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    "5-Bedroom Duplex with Rooftop Lounge",
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24.0,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Row(
+                    children: [
+                      Container(
+                        height: 24.0,
+                        width: 24.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                              "assets/dummy/dummy_product_details_profile_picture.png",
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(100.0),
+                        ),
+                      ),
+                      SizedBox(width: 8.0),
+                      Text(
+                        "by OkoliKong",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.0,
+                          color: Color(0xFF6B6B6B),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 16.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            formatNaira(3500000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 28,
+                              color: Color(0xFF2D5DDC),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/icons/PBA_tag.svg"),
+                              SizedBox(width: 4.0),
+                              Text(
+                                "Opening Bid",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF6B6B6B),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "Starts in",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 10.0,
+                              color: Color(0xFF6B6B6B),
+                            ),
+                          ),
+
+                          Text(
+                            "23h 22m",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.0,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 32.0),
+
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          SvgPicture.asset("assets/icons/PBA_box.svg"),
+                          SizedBox(width: 8.0),
+                          Text(
+                            "Description",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        "Product Details",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15.0,
+                          color: Color(0xFF6B6B6B),
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      Text(
+                        "Crafted from 100% solid oak, this Classic Dining Chair brings lasting quality and simple elegance to your space. The chair’s natural grain is preserved with a smooth matte finish that resists scratches and stains while maintaining a warm, organic look. Its straight backrest offers firm ergonomic support, and the slightly contoured seat ensures comfort for long meals or work sessions.",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15.0,
+                          color: Color(0xFF6B6B6B),
+                        ),
+                      ),
+                      SizedBox(height: 4.0),
+                      GestureDetector(
+                        onTap: () {
+                          // Show more details
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              "Read More",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14.0,
+                                color: Color(0xFF8BAA2A),
+                              ),
+                            ),
+                            SizedBox(width: 2.0),
+
+                            SvgPicture.asset(
+                              "assets/icons/PBA_chevron_down.svg",
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 // Auction Product Screen | End
+
+// My Bids Screen | Start
+
+class MyBidsScreen extends StatefulWidget {
+  const MyBidsScreen({super.key});
+
+  @override
+  State<MyBidsScreen> createState() => _MyBidsScreenState();
+}
+
+class _MyBidsScreenState extends State<MyBidsScreen>
+    with SingleTickerProviderStateMixin {
+  List myBidsScreenTabs = [
+    {
+      "tab-label": "Active",
+      "tab-icon": "assets/icons/my_bids/my_bids_active_tab_tag_icon.svg",
+    },
+    {
+      "tab-label": "Won",
+      "tab-icon": "assets/icons/my_bids/my_bids_wins_tab_trophy_icon.svg",
+    },
+    {
+      "tab-label": "Loss",
+      "tab-icon": "assets/icons/my_bids/my_bids_lost_tab_loss_icon.svg",
+    },
+  ];
+
+  List activeAuctionBids = [
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "current-bid": 600400,
+      "time-left-in-seconds": 40,
+      "bid-position":
+          1, // This simulates that amongst the bid places this is the position of your bid relative to amount | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "current-bid": 600400,
+      "time-left-in-seconds": 40,
+      "bid-position":
+          2, // This simulates that amongst the bid places this is the position of your bid relative to amount | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "current-bid": 600400,
+      "time-left-in-seconds": 40,
+      "bid-position":
+          3, // This simulates that amongst the bid places this is the position of your bid relative to amount | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "current-bid": 600400,
+      "time-left-in-seconds": 40,
+      "bid-position":
+          4, // This simulates that amongst the bid places this is the position of your bid relative to amount | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "current-bid": 600400,
+      "time-left-in-seconds": 40,
+      "bid-position":
+          2, // This simulates that amongst the bid places this is the position of your bid relative to amount | will be calulated in backend on may on app
+    },
+  ];
+
+  List wonAuctionBids = [
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "bid-delivery-status":
+          0, // This simulates the status of delivery | 0 would be initial state, 1- delivery in progress , 2 - delivery successful, 3-there was an issue with | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "bid-delivery-status":
+          1, // This simulates the status of delivery | 0 would be initial state, 1- delivery in progress , 2 - delivery successful, 3-there was an issue with | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "bid-delivery-status":
+          2, // This simulates the status of delivery | 0 would be initial state, 1- delivery in progress , 2 - delivery successful, 3-there was an issue with | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "bid-delivery-status":
+          0, // This simulates the status of delivery | 0 would be initial state, 1- delivery in progress , 2 - delivery successful, 3-there was an issue with | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "bid-delivery-status":
+          0, // This simulates the status of delivery | 0 would be initial state, 1- delivery in progress , 2 - delivery successful, 3-there was an issue with | will be calulated in backend on may on app
+    },
+  ];
+
+  List lostAuctionBids = [
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "reason-for-loss":
+          1, // This simulates the reason user lost the bid | 0 - user did not win, 1- user defaulted | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "reason-for-loss":
+          0, // This simulates the reason user lost the bid | 0 - user did not win, 1- user defaulted | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "reason-for-loss":
+          1, // This simulates the reason user lost the bid | 0 - user did not win, 1- user defaulted | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "reason-for-loss":
+          0, // This simulates the reason user lost the bid | 0 - user did not win, 1- user defaulted | will be calulated in backend on may on app
+    },
+    {
+      "product-image": "assets/dummy/dummy_my_bids_product_image.png",
+      "product-title": "Rolex Submariner Date Stainless Steel",
+      "winning-bid": 600400,
+      "reason-for-loss":
+          0, // This simulates the reason user lost the bid | 0 - user did not win, 1- user defaulted | will be calulated in backend on may on app
+    },
+  ];
+
+  String getActiveBidMessage({required int bidPosition}) {
+    String bidMessage = "↕️ You’ve been outbid";
+
+    if (bidPosition == 1) {
+      bidMessage = "🔥 You’re currently the highest bidder";
+    }
+
+    if (bidPosition == 2) {
+      bidMessage = "🥈 You’re currently the second highest";
+    }
+
+    return bidMessage;
+  }
+
+  String getWonBidMessage({required int deliveryStatus}) {
+    String bidMessage = "🏆 You won this auction!";
+
+    if (deliveryStatus == 1) {
+      bidMessage = "📦 Delivery in progress";
+    }
+
+    if (deliveryStatus == 2) {
+      bidMessage = "🎉 Item received successfully";
+    }
+
+    return bidMessage;
+  }
+
+  Map<String, dynamic> getActiveBidMessageColor({required int bidPosition}) {
+    Map<String, dynamic> bidMessageColor = {
+      "background-color": Color(0xFFF5F5F5),
+      "text-color": Color(0xFF1A1A1A),
+    };
+
+    if (bidPosition == 1) {
+      bidMessageColor = {
+        "background-color": Color(0xFFE8F6ED),
+        "text-color": Color(0xFF16A34A),
+      };
+    }
+
+    if (bidPosition == 2) {
+      bidMessageColor = {
+        "background-color": Color(0xFFFDF7E6),
+        "text-color": Color(0xFFEAB308),
+      };
+    }
+
+    return bidMessageColor;
+  }
+
+  Map<String, dynamic> getWonBidMessageColor({required int deliveryStatus}) {
+    Map<String, dynamic> bidMessageColor = {
+      "background-color": Color(0xFFE8F6ED),
+      "text-color": Color(0xFF16A34A),
+    };
+
+    if (deliveryStatus == 1) {
+      bidMessageColor = {
+        "background-color": Color(0xFFFDF7E6),
+        "text-color": Color(0xFFEAB308),
+      };
+    }
+
+    return bidMessageColor;
+  }
+
+  String formatNaira(int amount) {
+    if (amount >= 1_000_000) {
+      final value = amount / 1_000_000;
+
+      final formatted = value % 1 == 0
+          ? value.toInt().toString()
+          : value.toStringAsFixed(1);
+
+      return '₦${formatted}m';
+    }
+
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return '₦${formatter.format(amount)}';
+  }
+
+  String formatDuration(int totalSeconds) {
+    final hours = totalSeconds ~/ 3600;
+    final minutes = (totalSeconds % 3600) ~/ 60;
+    final seconds = totalSeconds % 60;
+
+    if (hours > 0) {
+      return '${hours}h ${minutes}m';
+    }
+
+    if (minutes > 0) {
+      return '${minutes}m';
+    }
+
+    return '${seconds}s';
+  }
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 16.0,
+        title: Text(
+          "My Bids",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w700,
+            fontSize: 20.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+        centerTitle: false,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40.0,
+                      child: TextField(
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15.0,
+                          color: Color(0xFF1E1E1E),
+                        ),
+                        cursorColor: Color(0xFF1E1E1E),
+                        keyboardType: TextInputType.webSearch,
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 8.0,
+                            ).copyWith(right: 10.0),
+                            child: SvgPicture.asset(
+                              "assets/icons/PBA_search_icon.svg",
+                            ),
+                          ),
+                          hintText: "Search auctions or items...",
+                          hintStyle: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xFFA5A5A5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 7.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            gapPadding: 10.0,
+                            borderSide: BorderSide(
+                              width: 1.0,
+                              color: Color(0xFFE5E5E5),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            gapPadding: 10.0,
+                            borderSide: BorderSide(
+                              width: 1.0,
+                              color: Color(0xFF1E1E1E),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            gapPadding: 10.0,
+                            borderSide: BorderSide(
+                              width: 1.0,
+                              color: Color(0xFFE5E5E5),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12.0),
+
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFE5E5E5),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/my_bids_screen_filter_button_icon.svg",
+                          ),
+                          SizedBox(width: 8.0),
+                          Text(
+                            "All",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15.0,
+                              color: Color(0xFFA5A5A5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 16.0),
+
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AnimatedBuilder(
+                      animation: _tabController,
+                      builder: (context, _) {
+                        return TabBar(
+                          controller: _tabController,
+                          isScrollable: true,
+                          dividerColor: Colors.transparent,
+                          dividerHeight: 0.0,
+                          tabAlignment: TabAlignment.start,
+                          indicatorSize: TabBarIndicatorSize.label,
+                          labelStyle: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                          unselectedLabelStyle: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xFFA5A5A5),
+                          ),
+                          labelPadding: EdgeInsets.only(right: 24.0),
+                          indicatorPadding: EdgeInsets.only(bottom: 6),
+                          indicatorColor: Color(0xFF1A1A1A),
+                          tabs: List.generate(myBidsScreenTabs.length, (index) {
+                            final tab = myBidsScreenTabs[index];
+                            final isSelected = _tabController.index == index;
+                            return Tab(
+                              child: Row(
+                                children: [
+                                  SvgPicture.asset(
+                                    tab["tab-icon"],
+                                    colorFilter: ColorFilter.mode(
+                                      isSelected
+                                          ? const Color(0xFF1A1A1A)
+                                          : const Color(0xFFA5A5A5),
+                                      BlendMode.srcIn,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8.0),
+                                  Text(tab["tab-label"]),
+                                ],
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 4.0),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          ListView(
+                            children: activeAuctionBids.map((activeAuctionBid) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(vertical: 12.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 64.0,
+                                          width: 64.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              6.0,
+                                            ),
+
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                activeAuctionBid["product-image"],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                activeAuctionBid["product-title"],
+                                                style: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14.0,
+                                                  color: Color(0xFF1A1A1A),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8.0),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        formatNaira(
+                                                          activeAuctionBid["current-bid"],
+                                                        ),
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 20.0,
+                                                              color: Color(
+                                                                0xFF2D5DDC,
+                                                              ),
+                                                            ),
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          SvgPicture.asset(
+                                                            "assets/icons/PBA_tag.svg",
+                                                          ),
+                                                          SizedBox(width: 4.0),
+                                                          Text(
+                                                            "Current bid",
+                                                            style:
+                                                                GoogleFonts.inter(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                  fontSize:
+                                                                      12.0,
+                                                                  color: Color(
+                                                                    0xFF6B6B6B,
+                                                                  ),
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+
+                                                  Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        "assets/icons/PBA_clock.svg",
+                                                      ),
+                                                      SizedBox(width: 1.0),
+                                                      Text(
+                                                        "${formatDuration(activeAuctionBid["time-left-in-seconds"])} left",
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400,
+                                                              fontSize: 14.0,
+                                                              color: Color(
+                                                                0xFFDC2626,
+                                                              ),
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 14.5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12.0,
+                                            vertical: 6.0,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: getActiveBidMessageColor(
+                                              bidPosition:
+                                                  activeAuctionBid["bid-position"],
+                                            )["background-color"],
+                                            borderRadius: BorderRadius.circular(
+                                              100.0,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            getActiveBidMessage(
+                                              bidPosition:
+                                                  activeAuctionBid["bid-position"],
+                                            ),
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12.0,
+                                              color: getActiveBidMessageColor(
+                                                bidPosition:
+                                                    activeAuctionBid["bid-position"],
+                                              )["text-color"],
+                                            ),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 8.0,
+                                              horizontal: 14.0,
+                                            ),
+
+                                            backgroundColor: Color(0xFF000000),
+                                            foregroundColor: Color(0xFFFFFFFF),
+                                            disabledBackgroundColor: Color(
+                                              0xFFEEEEEE,
+                                            ),
+                                            disabledForegroundColor: Color(
+                                              0xFFA5A5A5,
+                                            ),
+                                          ),
+                                          onPressed:
+                                              activeAuctionBid["bid-position"] ==
+                                                  1
+                                              ? null
+                                              : () {},
+                                          child: Text(
+                                            "Place Bid",
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          // Won
+                          ListView(
+                            children: wonAuctionBids.map((wonAuctionBid) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(vertical: 12.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 64.0,
+                                          width: 64.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              6.0,
+                                            ),
+
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                wonAuctionBid["product-image"],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                wonAuctionBid["product-title"],
+                                                style: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14.0,
+                                                  color: Color(0xFF1A1A1A),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8.0),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    formatNaira(
+                                                      wonAuctionBid["winning-bid"],
+                                                    ),
+                                                    style: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 20.0,
+                                                      color: Color(0xFF2D5DDC),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        "assets/icons/PBA_tag.svg",
+                                                      ),
+                                                      SizedBox(width: 4.0),
+                                                      Text(
+                                                        "Winning bid",
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 12.0,
+                                                              color: Color(
+                                                                0xFF6B6B6B,
+                                                              ),
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 14.5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 12.0,
+                                            vertical: 6.0,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: getWonBidMessageColor(
+                                              deliveryStatus:
+                                                  wonAuctionBid["bid-delivery-status"],
+                                            )["background-color"],
+                                            borderRadius: BorderRadius.circular(
+                                              100.0,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            getWonBidMessage(
+                                              deliveryStatus:
+                                                  wonAuctionBid["bid-delivery-status"],
+                                            ),
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12.0,
+                                              color: getWonBidMessageColor(
+                                                deliveryStatus:
+                                                    wonAuctionBid["bid-delivery-status"],
+                                              )["text-color"],
+                                            ),
+                                          ),
+                                        ),
+                                        wonAuctionBid["bid-delivery-status"] ==
+                                                2
+                                            ? SizedBox.shrink()
+                                            : ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  padding: EdgeInsets.symmetric(
+                                                    vertical: 8.0,
+                                                    horizontal: 14.0,
+                                                  ),
+
+                                                  backgroundColor: Color(
+                                                    0xFF000000,
+                                                  ),
+                                                  foregroundColor: Color(
+                                                    0xFFFFFFFF,
+                                                  ),
+                                                ),
+                                                onPressed: () {},
+                                                child: Text(
+                                                  wonAuctionBid["bid-delivery-status"] ==
+                                                          0
+                                                      ? "Pay now"
+                                                      : wonAuctionBid["bid-delivery-status"] ==
+                                                            1
+                                                      ? "Mark As Received"
+                                                      : "Resolve", // because button will not show if delivery was successful and another usecase is an error
+                                                  style: GoogleFonts.inter(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 12.0,
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+
+                          // Lost
+                          ListView(
+                            children: lostAuctionBids.map((lostAuctionBid) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(vertical: 12.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 64.0,
+                                          width: 64.0,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              6.0,
+                                            ),
+
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                lostAuctionBid["product-image"],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 12.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                lostAuctionBid["product-title"],
+                                                style: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14.0,
+                                                  color: Color(0xFF1A1A1A),
+                                                ),
+                                              ),
+                                              SizedBox(height: 8.0),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    formatNaira(
+                                                      lostAuctionBid["winning-bid"],
+                                                    ),
+                                                    style: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 20.0,
+                                                      color: Color(0xFF2D5DDC),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        "assets/icons/PBA_tag.svg",
+                                                      ),
+                                                      SizedBox(width: 4.0),
+                                                      Text(
+                                                        "Winning bid",
+                                                        style:
+                                                            GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                              fontSize: 12.0,
+                                                              color: Color(
+                                                                0xFF6B6B6B,
+                                                              ),
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(height: 14.5),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 12.0,
+                                        vertical: 6.0,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFFCE9E9),
+                                        borderRadius: BorderRadius.circular(
+                                          100.0,
+                                        ),
+                                      ),
+                                      child: Text(
+                                        lostAuctionBid["reason-for-loss"] == 0
+                                            ? "😑 You didn’t win this time"
+                                            : "😞 You defaulted on this auction",
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.0,
+                                          color: Color(0xFFDC2626),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// My Bids Screen | End
