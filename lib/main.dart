@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: BvnVerificationScreen());
+    return MaterialApp(home: AddBankAccountScreen());
   }
 }
 
@@ -5141,7 +5141,127 @@ class BvnVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: () {},
+            child: Text(
+              "Verify",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+
+        centerTitle: true,
+        title: Text(
+          "Wallet Activation",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0).copyWith(top: 40.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Enter Your BVN",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24.0,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  "We use your BVN to confirm your identity. It cannot access your bank account.",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.0,
+                    color: Color(0xFF6B6B6B),
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                Text(
+                  "BVN",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.0,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                TextField(
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                    color: Color(0xFF1E1E1E),
+                  ),
+                  cursorColor: Color(0xFF1E1E1E),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "Enter 11 digit number",
+                    hintStyle: GoogleFonts.inter(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
+                      color: Color(0xFFA5A5A5),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      gapPadding: 10.0,
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      gapPadding: 10.0,
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFF1E1E1E),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      gapPadding: 10.0,
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -5149,8 +5269,408 @@ class BvnVerificationScreen extends StatelessWidget {
 
 // Confirm BVN Details Screen | Start
 
+class ConfirmBVNDetailsScreen extends StatelessWidget {
+  const ConfirmBVNDetailsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+
+        centerTitle: true,
+        title: Text(
+          "Wallet Activation",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: () {},
+            child: Text(
+              "Continue",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0).copyWith(top: 40.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Confirm Your Details",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24.0,
+                  color: Color(0xFF1A1A1A),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                "These details match the records linked to your BVN.",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15.0,
+                  color: Color(0xFF6B6B6B),
+                ),
+              ),
+              SizedBox(height: 32.0),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Full Name",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "Okorometa Japheth",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Phone Number",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "08123748484",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Date of Birth",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "15th June, 1999",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 15.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // Confirm BVN Details Screen | End
 
 // Add Bank Account Screen | Start
+
+class AddBankAccountScreen extends StatelessWidget {
+  const AddBankAccountScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    bool isValueEntered =
+        true; // This siumlates the different state of the add our account screen
+    bool isValueReturned =
+        true; // This siumlates the different state of the add our account screen
+    bool isValueValid =
+        false; // This siumlates the different state of the add our account screen
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+
+        centerTitle: true,
+        title: Text(
+          "Wallet Activation",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              disabledBackgroundColor: Color(0xFFEEEEEE),
+              disabledForegroundColor: Color(0xFFA5A5A5),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: isValueEntered == false || isValueValid == false
+                ? null
+                : () {},
+            child: Text(
+              "Continue",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0).copyWith(top: 40.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Add your bank account",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 24.0,
+                  color: Color(0xFF1A1A1A),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                "This account will receive your withdrawals. Make sure the name on BVN matches the details of the bank account provided.",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 15.0,
+                  color: Color(0xFF6B6B6B),
+                ),
+              ),
+              SizedBox(height: 32.0),
+
+              Text(
+                "BVN",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.0,
+                  color: Color(0xFF1A1A1A),
+                ),
+              ),
+              SizedBox(height: 8.0),
+              TextField(
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.0,
+                  color: Color(0xFF1E1E1E),
+                ),
+                cursorColor: Color(0xFF1E1E1E),
+                keyboardType: TextInputType.text,
+
+                decoration: InputDecoration(
+                  hintText: "Type to search",
+                  hintStyle: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                    color: Color(0xFFA5A5A5),
+                  ),
+
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SvgPicture.asset(
+                      "assets/icons/add_bank_account_dropdown_icon.svg",
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFE5E5E5),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFF1E1E1E),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFE5E5E5),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Text(
+                "Account Number",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14.0,
+                  color: Color(0xFF1A1A1A),
+                ),
+              ),
+              SizedBox(height: 8.0),
+              TextField(
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.0,
+                  color: Color(0xFF1E1E1E),
+                ),
+                cursorColor: Color(0xFF1E1E1E),
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Enter 11 digit number",
+                  hintStyle: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                    color: Color(0xFFA5A5A5),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFE5E5E5),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFF1E1E1E),
+                    ),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    gapPadding: 10.0,
+                    borderSide: BorderSide(
+                      width: 1.0,
+                      color: Color(0xFFE5E5E5),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8.0),
+              isValueEntered == true && isValueReturned == true
+                  ? Text(
+                      "OKOROMETA JAPHETH",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.0,
+                        color: Color(0xFF16A34A),
+                      ),
+                    )
+                  : SizedBox.shrink(),
+              SizedBox(height: 21.0),
+              isValueReturned == true && isValueValid == false
+                  ? Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFCE9E9),
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(
+                          color: Color(0xFFDC2626),
+                          width: 0.5,
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SvgPicture.asset(
+                            "assets/icons/add_back_account_error_icon.svg",
+                          ),
+                          SizedBox(width: 14.25),
+                          Expanded(
+                            child: Text(
+                              "The BVN name does not match the bank account name. Use your own BVN and bank account.",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14.0,
+                                color: Color(0xFFDC2626),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : SizedBox.shrink(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 // Add Bank Account  Screen | End
