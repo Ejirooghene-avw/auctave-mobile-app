@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyBidsScreen());
+    return MaterialApp(home: PaymentScreen());
   }
 }
 
@@ -4546,3 +4546,322 @@ class _MyBidsScreenState extends State<MyBidsScreen>
 }
 
 // My Bids Screen | End
+
+// Payment Screen | Start
+
+class PaymentScreen extends StatelessWidget {
+  const PaymentScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    bool isWalletBalanceLow =
+        false; // This is to simulate a low or high wallet balance | balance will be caluclated by backend
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+        centerTitle: true,
+        title: Text(
+          "Make Payment",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Text(
+                "₦540,000.00",
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 32.0,
+                  color: Color(0xFF2D5DDC),
+                ),
+              ),
+              SizedBox(height: 24.0),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
+                decoration: BoxDecoration(color: Color(0xFFF5F5F5)),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Item",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "Solid Oak Classic Dining Chair",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Seller",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "Josh_King",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 32.0),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final dashCount = (constraints.maxWidth / (4 + 4))
+                            .floor();
+
+                        return Row(
+                          children: List.generate(dashCount, (_) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 4),
+                              child: SizedBox(
+                                width: 4,
+                                height: 0.5,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF1E1E1E),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    ),
+
+                    SizedBox(height: 32.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Winning Bid",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "₦600,400.00", // TODO: Remember to Use format Naira when working with mock/real Data
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Bid Commitment (10%)",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          "-₦60,400.00",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Balance to Pay",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                        Text(
+                          "₦540,000.00",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 32.0),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final dashCount = (constraints.maxWidth / (4 + 4))
+                            .floor();
+
+                        return Row(
+                          children: List.generate(dashCount, (_) {
+                            return Padding(
+                              padding: EdgeInsets.only(right: 4),
+                              child: SizedBox(
+                                width: 4,
+                                height: 0.5,
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF1E1E1E),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 32.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Wallet Balance",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          isWalletBalanceLow == true
+                              ? "₦200,400.00"
+                              : "₦900,400.00",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: isWalletBalanceLow == true
+                                ? Color(0xFFDC2626)
+                                : Color(0xFF16A34A),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24.0),
+
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFEAEFFC),
+                  border: Border.all(width: 0.5, color: Color(0xFF2D5DDC)),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset("assets/icons/PBA_lock.svg"),
+                    SizedBox(width: 20.0),
+                    Expanded(
+                      child: RichText(
+                        text: TextSpan(
+                          text:
+                              "Your payment goes into escrow, so your money stays secure while the seller ships your item.",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF2D5DDC),
+                          ),
+                          children: [
+                            TextSpan(text: " "),
+                            TextSpan(
+                              text: "Learn More",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.0,
+                                color: Color(0xFF2D5DDC),
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              Spacer(),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0Xff000000),
+                    foregroundColor: Color(0xFFFFFFFF),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 24.0,
+                      vertical: 12.0,
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    isWalletBalanceLow == true ? "Fund Wallet" : "Make Payment",
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Payment Screen | End
