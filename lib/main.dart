@@ -1,10 +1,13 @@
+import 'package:auctave_mobile_app/config/providers/app_providers.dart';
+import 'package:auctave_mobile_app/routing/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MultiProvider(providers: AppProviders.providers, child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -12,259 +15,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: AddBankAccountScreen());
-  }
-}
-
-// Splash Screen | Start
-
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFC4F03B),
-      body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Center(child: SvgPicture.asset("assets/logos/app_logo.svg")),
-
-            Positioned(
-              bottom: 100.0,
-              child: Row(
-                children: List.generate(3, (index) {
-                  return Container(
-                    height: 12.0,
-                    width: 12.0,
-                    margin: EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(24.0),
-                    ),
-                  );
-                }),
-              ),
-            ),
-          ],
-        ),
-      ),
+    return MaterialApp(
+      title: "Auctave App",
+      debugShowCheckedModeBanner: false,
+      initialRoute: AppRoutes.splash,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
-
-// Splash Screen | End
-
-// Onboarding Screen. | Start
-
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
-
-  @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
-}
-
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _pageController = PageController();
-
-  int currentSlideIndex = 0;
-
-  bool shouldSkipBeVisible = true;
-
-  List onboardingSlideDetails = [
-    {
-      "image": "assets/illustrations/onboarding_carousel_win_starts_here.svg",
-      "title": "Your next win starts here.",
-      "sub-title":
-          "Bid in real time, compete fairly, and grab deals before the clock runs out.",
-      "button-text": "Next",
-    },
-
-    {
-      "image": "assets/illustrations/onboarding_carousel_bids_do_the_work.svg",
-      "title": "Let the bids do the work.",
-      "sub-title":
-          "List your an item once and watch buyers raise the price for you.",
-      "button-text": "Next",
-    },
-
-    {
-      "image": "assets/illustrations/onboarding_carousel_win_safe_trades.svg",
-      "title": "Safe trades, happy faces.",
-      "sub-title":
-          "Every payment sits in escrow until delivery, so no one loses out.",
-      "button-text": "Sign Up",
-    },
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(vertical: 18.0),
-              foregroundColor: Color(0xFFFFFFFF),
-              backgroundColor: Color(0xFF000000),
-            ),
-            onPressed: () {
-              bool isNextPageAvailable =
-                  currentSlideIndex + 1 < onboardingSlideDetails.length;
-
-              if (isNextPageAvailable == true) {
-                _pageController.nextPage(
-                  duration: Duration(milliseconds: 400),
-                  curve: Curves.linear,
-                );
-              } else {
-                // TODO: implement sign Up button function
-                print("Onboaring Complete : You may proceed to next page");
-              }
-            },
-            child: Text(
-              onboardingSlideDetails[currentSlideIndex]["button-text"],
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w500,
-                fontSize: 16.0,
-              ),
-            ),
-          ),
-        ),
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0).copyWith(top: 12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    [
-                      currentSlideIndex + 1,
-                      onboardingSlideDetails.length,
-                    ].join("/"),
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14.0,
-                      color: Color(0xFF6C6C6C), //Text/Secondary
-                    ),
-                  ),
-                  shouldSkipBeVisible == true
-                      ? GestureDetector(
-                          onTap: () {
-                            // TODO: implement skip function
-                          },
-                          child: Text(
-                            "Skip",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14.0,
-                              color: Color(0xFF000000), //PBA/Brand/Black
-                            ),
-                          ),
-                        )
-                      : SizedBox.shrink(),
-                ],
-              ),
-              SizedBox(height: 12.0),
-              Row(
-                children: List.generate(onboardingSlideDetails.length, (index) {
-                  bool isCurrentSlideSameAsIndex = currentSlideIndex == index;
-                  bool isCurrentSlideGreaterThanIndex =
-                      (currentSlideIndex + 1 > index) &&
-                      (currentSlideIndex != 0);
-
-                  return Expanded(
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 6.0,
-                          width: isCurrentSlideSameAsIndex == true
-                              ? 8
-                              : double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 2.0),
-                          decoration: BoxDecoration(
-                            color: isCurrentSlideGreaterThanIndex == true
-                                ? Color(0xFFB2DA36)
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(100.0),
-                          ),
-                        ),
-                        Container(
-                          height: 6,
-                          width: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: 2.0),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-              SizedBox(height: 68.0),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  onPageChanged: (newSlideIndex) {
-                    setState(() {
-                      currentSlideIndex = newSlideIndex;
-
-                      // to check if we have reached the end of the slides
-                      // if we have reached the end then skip button should not be visible
-                      if (currentSlideIndex + 1 >=
-                          onboardingSlideDetails.length) {
-                        shouldSkipBeVisible = false;
-                      }
-                    });
-                  },
-                  children: onboardingSlideDetails.map((slideDetail) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SvgPicture.asset(slideDetail["image"]),
-                        SizedBox(height: 56.0),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.50,
-                          child: Text(
-                            slideDetail["title"],
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 32.0,
-                              color: Color(0xFF1A1A1A),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 16.0),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.52,
-                          child: Text(
-                            slideDetail["sub-title"],
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16.0,
-                              color: Color(0xFF6B6B6B),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// Onboarding Screen. | End
 
 // Sign In Screen | Start
 
@@ -4875,7 +4633,74 @@ class WalletScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isWalletActivated = true;
     bool isWalletBalanceLow = true;
-    bool isTransactionHistoryEmpty = true;
+    bool isTransactionHistoryEmpty = false;
+
+    bool isWalletVisible = true;
+
+    List walletTransactions = [
+      {
+        "transaction-title":
+            "Payment received for Solid Oak Classic Dining Chair",
+        "time-of-transaction": "Just now",
+        "transaction-amount": 600400,
+        "transaction-state": 0, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Withdrawal",
+        "time-of-transaction": "Today   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title":
+            "Payment made for Lamborghini Aventador LP 780-4 Ultimate",
+        "time-of-transaction": "Yesterday   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Default fee charge",
+        "time-of-transaction": "Yesterday   08:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+      {
+        "transaction-title": "Default fee charge",
+        "time-of-transaction": "12 Sept. 2025   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+      {
+        "transaction-title": "Wallet top up",
+        "time-of-transaction": "14 Sept. 2025   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+    ];
+
+    String formatNaira(int amount) {
+      if (amount >= 1_000_000) {
+        final value = amount / 1_000_000;
+
+        final formatted = value % 1 == 0
+            ? value.toInt().toString()
+            : value.toStringAsFixed(1);
+
+        return '₦${formatted}m';
+      }
+
+      final formatter = NumberFormat('#,##0', 'en_US');
+      return '₦${formatter.format(amount)}';
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -5008,14 +4833,18 @@ class WalletScreen extends StatelessWidget {
                               IconButton(
                                 onPressed: () {},
                                 icon: Icon(
-                                  Icons.visibility_off,
+                                  isWalletVisible == true
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                   color: Color(0xFF1E1E1E),
                                 ),
                               ),
                             ],
                           ),
                           Text(
-                            "₦0.00",
+                            isWalletVisible == true
+                                ? "${isWalletBalanceLow == true ? formatNaira(0) : formatNaira(900950)}.00"
+                                : "****",
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w700,
                               fontSize: 32.0,
@@ -5056,6 +4885,8 @@ class WalletScreen extends StatelessWidget {
                         Expanded(
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFC4F03B),
+                              foregroundColor: Color(0xFF000000),
                               disabledBackgroundColor: Color(0xFFEEEEEE),
                               disabledForegroundColor: Color(0xFFA5A5A5),
                               padding: EdgeInsets.symmetric(
@@ -5076,6 +4907,12 @@ class WalletScreen extends StatelessWidget {
 
                             icon: SvgPicture.asset(
                               "assets/icons/diagonal_arrow.svg",
+                              colorFilter: ColorFilter.mode(
+                                isWalletBalanceLow == true
+                                    ? const Color(0xFFA5A5A5)
+                                    : const Color(0xFF000000),
+                                BlendMode.srcIn,
+                              ),
                             ),
                           ),
                         ),
@@ -5084,13 +4921,34 @@ class WalletScreen extends StatelessWidget {
 
                     SizedBox(height: 40.0),
 
-                    Text(
-                      "Transactions",
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20.0,
-                        color: Color(0xFF1A1A1A),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Transactions",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+
+                        isTransactionHistoryEmpty == false
+                            ? GestureDetector(
+                                onTap: () {
+                                  // TODO: implement view all function
+                                },
+                                child: Text(
+                                  "View All",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.0,
+                                    color: Color(0xFF8BAA2A),
+                                  ),
+                                ),
+                              )
+                            : SizedBox.shrink(),
+                      ],
                     ),
 
                     isTransactionHistoryEmpty == true
@@ -5123,7 +4981,103 @@ class WalletScreen extends StatelessWidget {
                               ],
                             ),
                           )
-                        : SizedBox.shrink(),
+                        : Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.only(top: 16.0),
+                              itemCount: walletTransactions.length,
+                              itemBuilder: (context, index) {
+                                var walletTransaction =
+                                    walletTransactions[index];
+
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 12.0,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              walletTransaction["transaction-type"] ==
+                                                      2
+                                                  ? "assets/icons/transaction_icons/transaction_type_icon_credit.svg"
+                                                  : "assets/icons/transaction_icons/transaction_type_icon_debit.svg",
+                                            ),
+                                            const SizedBox(width: 12),
+
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    walletTransaction["transaction-title"],
+
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14.0,
+                                                      color: Color(0xFF1A1A1A),
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4),
+                                                  Text(
+                                                    walletTransaction["time-of-transaction"],
+                                                    style: GoogleFonts.inter(
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 12.0,
+                                                      color: Color(0xFF6B6B6B),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+
+                                      const SizedBox(width: 16),
+
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          Text(
+                                            "${walletTransaction["transaction-type"] == 2 ? "+" : "-"}${formatNaira(walletTransaction["transaction-amount"])}",
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15.0,
+                                              color: Color(0xFF1A1A1A),
+                                            ),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Text(
+                                            walletTransaction["transaction-state"] ==
+                                                    0
+                                                ? "Processing"
+                                                : "Successful",
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12.0,
+                                              color:
+                                                  walletTransaction["transaction-state"] ==
+                                                      0
+                                                  ? Color(0xFFA5A5A5)
+                                                  : Color(0xFF16A34A),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                   ],
                 ),
         ),
@@ -5674,3 +5628,1527 @@ class AddBankAccountScreen extends StatelessWidget {
 }
 
 // Add Bank Account  Screen | End
+
+// Transaction History Screen | Start
+
+class TransactionHistoryScreen extends StatelessWidget {
+  const TransactionHistoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    List walletTransactions = [
+      {
+        "transaction-title":
+            "Payment received for Solid Oak Classic Dining Chair",
+        "time-of-transaction": "Just now",
+        "transaction-amount": 600400,
+        "transaction-state": 0, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Withdrawal",
+        "time-of-transaction": "Today   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title":
+            "Payment made for Lamborghini Aventador LP 780-4 Ultimate",
+        "time-of-transaction": "Yesterday   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Default fee charge",
+        "time-of-transaction": "Yesterday   08:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+      {
+        "transaction-title": "Default fee charge",
+        "time-of-transaction": "12 Sept. 2025   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title":
+            "Payment refund for Solid Oak Classic Dining Chairr",
+        "time-of-transaction": "12 Sept. 2025   09:21 AM",
+        "transaction-amount": 700000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Payment made for Solid Oak Classic Dining Chair",
+        "time-of-transaction": "13 Sept. 2025   09:5 AM",
+        "transaction-amount": 665000,
+        "transaction-state": 2, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Bid commitment fee ",
+        "time-of-transaction": "13 Sept. 2025   09:5 AM",
+        "transaction-amount": 35000,
+        "transaction-state": 2, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 1, // 1 - debit , 2 credit
+      },
+
+      {
+        "transaction-title": "Bid commitment fee refund ",
+        "time-of-transaction": "13 Sept. 2025   09:5 AM",
+        "transaction-amount": 40000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+      {
+        "transaction-title": "Wallet top up",
+        "time-of-transaction": "14 Sept. 2025   09:21 AM",
+        "transaction-amount": 2500000,
+        "transaction-state": 1, // 0 - process , 1 - successful, 2 - error
+        "transaction-type": 2, // 1 - debit , 2 credit
+      },
+    ];
+
+    String formatNaira(int amount) {
+      if (amount >= 1_000_000) {
+        final value = amount / 1_000_000;
+
+        final formatted = value % 1 == 0
+            ? value.toInt().toString()
+            : value.toStringAsFixed(1);
+
+        return '₦${formatted}m';
+      }
+
+      final formatter = NumberFormat('#,##0', 'en_US');
+      return '₦${formatter.format(amount)}';
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+        centerTitle: true,
+        title: Text(
+          "Transaction History",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+
+      body: SafeArea(
+        child: ListView.builder(
+          padding: EdgeInsets.all(16.0),
+          itemCount: walletTransactions.length,
+          itemBuilder: (context, index) {
+            var walletTransaction = walletTransactions[index];
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          walletTransaction["transaction-type"] == 2
+                              ? "assets/icons/transaction_icons/transaction_type_icon_credit.svg"
+                              : "assets/icons/transaction_icons/transaction_type_icon_debit.svg",
+                        ),
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                walletTransaction["transaction-title"],
+
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                walletTransaction["time-of-transaction"],
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.0,
+                                  color: Color(0xFF6B6B6B),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(width: 16),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "${walletTransaction["transaction-type"] == 2 ? "+" : "-"}${formatNaira(walletTransaction["transaction-amount"])}",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15.0,
+                          color: Color(0xFF1A1A1A),
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        walletTransaction["transaction-state"] == 0
+                            ? "Processing"
+                            : walletTransaction["transaction-state"] == 1
+                            ? "Successful"
+                            : "Escrow",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.0,
+                          color: walletTransaction["transaction-state"] == 1
+                              ? Color(0xFF16A34A)
+                              : Color(0xFFA5A5A5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// Transaction History Screen. | End
+
+// Transaction Details Screen | Start
+
+class TransactionDetailsScreen extends StatelessWidget {
+  const TransactionDetailsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var transactionDetailsWalletTopUp = {
+      "transaction-amount": 600400,
+      "transaction-type": 2, // 1 - debit , 2 - credit
+      "transaction-status": 1, // 0 - escrow, 1 - successful, 2 - error,
+      "transaction-date": "Today • 09:21 AM",
+      "transaction-id": "TXN-8GH29MD",
+      "transaction-payment-method": 1,
+      "transaction-reference": "PSTK-1829SKW2",
+    };
+
+    var transactionDetailsWithdrawal = {
+      "transaction-amount": 600400,
+      "transaction-type": 1, // 1 - debit , 2 - credit
+      "transaction-status": 1, // 0 - escrow, 1 - successful, 2 - error,
+      "transaction-category":
+          1, // 0 - wallet, 1 - bank transfer, 3 commitmentFee
+      "transaction-date": "Today • 09:21 AM",
+      "transaction-id": "TXN-8GH29MD",
+      "transaction-payment-method": 2, // 1 - wallet 2 - bank transfer
+      "recipient": "Okorometa Japheth",
+      "recipient-account-details": {
+        "account-number": "0094108831",
+        "bank-name": "First Bank",
+      },
+      "transaction-reference": "PSTK-1829SKW2",
+    };
+
+    var transactionDetailsCommitmentFee = {
+      "transaction-amount": 35000,
+      "transaction-type": 1, // 1 - debit , 2 - credit
+      "transaction-status": 0, // 0 - escrow, 1 - successful, 2 - error,
+      "transaction-date": "Today • 09:21 AM",
+      "transaction-payment-method": 1, // 1 - wallet 2 - bank transfer
+      "transaction-category":
+          3, // 0 - wallet, 1 - bank transfer, 3 commitmentFee
+      "product": {
+        "title": "Solid Oak Classic Dining Chair",
+        "seller": "Josh_king",
+        "commitment-fee-in-percent": 10,
+        "bid": 700000,
+      },
+      "transaction-reference": "PSTK-1829SKW2",
+    };
+
+    var transactionDetailsCommitmentFeeRefund = {
+      "transaction-amount": 35000,
+      "transaction-type": 2, // 1 - debit , 2 - credit
+      "transaction-status": 1, // 0 - escrow, 1 - successful, 2 - error,
+      "transaction-date": "Today • 09:21 AM",
+      "transaction-payment-method": 1, // 1 - wallet 2 - bank transfer
+      "transaction-category":
+          3, // 0 - wallet, 1 - bank transfer, 3 commitmentFee
+      "product": {
+        "title": "Solid Oak Classic Dining Chair",
+        "seller": "Josh_king",
+        "commitment-fee-in-percent": 10,
+        "bid": 700000,
+      },
+      "transaction-reference": "PSTK-1829SKW2",
+    };
+
+    var transactionDetailsPaymentMade = {
+      "transaction-amount": 700000,
+      "transaction-type": 2, // 1 - debit , 2 - credit
+      "transaction-status": 1, // 0 - escrow, 1 - successful, 2 - error,
+      "transaction-date": "Today • 09:21 AM",
+      "transaction-payment-method": 1, // 1 - wallet 2 - bank transfer
+      "transaction-category":
+          3, // 0 - wallet, 1 - bank transfer, 3 commitmentFee 4 paymentMade
+      "product": {
+        "title": "Solid Oak Classic Dining Chair",
+        "seller": "Josh_king",
+        "commitment-fee-in-percent": 10,
+        "bid": 700000,
+      },
+      "transaction-reference": "PSTK-1829SKW2",
+    };
+
+    var selectedTransactionDetails = transactionDetailsPaymentMade;
+
+    String formatNaira(int amount) {
+      if (amount >= 1_000_000) {
+        final value = amount / 1_000_000;
+
+        final formatted = value % 1 == 0
+            ? value.toInt().toString()
+            : value.toStringAsFixed(1);
+
+        return '₦${formatted}m';
+      }
+
+      final formatter = NumberFormat('#,##0', 'en_US');
+      return '₦${formatter.format(amount)}';
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+        centerTitle: true,
+        title: Text(
+          "Transaction Details",
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: () {},
+            label: Text(
+              "Share Receipt",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+            icon: SvgPicture.asset("assets/icons/PBA_share.svg"),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(bottom: 24.0, top: 16.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      selectedTransactionDetails["transaction-type"] == 1
+                          ? "assets/icons/transaction_icons/transaction_details_debit_image.svg"
+                          : "assets/icons/transaction_icons/transaction_details_credit_image.svg",
+                    ),
+                    SizedBox(height: 20.0),
+                    Text(
+                      "${selectedTransactionDetails["transaction-type"] == 1 ? "-" : "+"}${formatNaira(selectedTransactionDetails["transaction-amount"] as int)}",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 24.0,
+                        color: Color(0xFF1A1A1A),
+                      ),
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      "Wallet Top up", // create a function for all types of transactions
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.0,
+                        color: Color(0xFF6B6B6B),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 32.0),
+
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                decoration: BoxDecoration(
+                  color: Color(0xFFF5F5F5),
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Status",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          selectedTransactionDetails["transaction-status"] == 1
+                              ? "Successful"
+                              : "In escrow",
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color:
+                                selectedTransactionDetails["transaction-status"] ==
+                                    1
+                                ? Color(0xFF16A34A)
+                                : Color(0xFFA5A5A5),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Transaction Date",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          selectedTransactionDetails["transaction-date"]
+                              as String,
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+                    selectedTransactionDetails["transaction-category"] == 3
+                        ? SizedBox.shrink()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Transaction ID",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF6B6B6B),
+                                ),
+                              ),
+                              Text(
+                                selectedTransactionDetails["transaction-id"]
+                                    as String,
+                                textAlign: TextAlign.end,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                            ],
+                          ),
+                    selectedTransactionDetails["transaction-category"] == 3
+                        ? SizedBox.shrink()
+                        : SizedBox(height: 24.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          selectedTransactionDetails["transaction-category"] ==
+                                      3 &&
+                                  selectedTransactionDetails["transaction-type"] ==
+                                      2
+                              ? "Refund Type"
+                              : "Payment Method",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+
+                        selectedTransactionDetails["transaction-category"] ==
+                                    3 &&
+                                selectedTransactionDetails["transaction-type"] ==
+                                    2
+                            ? Text(
+                                "Escrow Refund",
+                                textAlign: TextAlign.end,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              )
+                            : Text(
+                                selectedTransactionDetails["transaction-payment-method"] ==
+                                        1
+                                    ? "Wallet"
+                                    : "Bank Transfer",
+                                textAlign: TextAlign.end,
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14.0,
+                                  color: Color(0xFF1A1A1A),
+                                ),
+                              ),
+                      ],
+                    ),
+                    SizedBox(height: 24.0),
+                    selectedTransactionDetails["transaction-payment-method"] ==
+                            2
+                        ? Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Recipient",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF6B6B6B),
+                                    ),
+                                  ),
+                                  Text(
+                                    selectedTransactionDetails["recipient"]
+                                        as String,
+                                    textAlign: TextAlign.end,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 24.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Account Details",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF6B6B6B),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "${(selectedTransactionDetails["recipient-account-details"] as Map<String, dynamic>)["account-number"]}",
+                                        textAlign: TextAlign.end,
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14.0,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                      ),
+                                      Text(
+                                        "${(selectedTransactionDetails["recipient-account-details"] as Map<String, dynamic>)["bank-name"]}",
+                                        textAlign: TextAlign.end,
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14.0,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 24.0),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Reference",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF6B6B6B),
+                          ),
+                        ),
+                        Text(
+                          selectedTransactionDetails["transaction-reference"]
+                              as String,
+                          textAlign: TextAlign.end,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14.0,
+                            color: Color(0xFF1A1A1A),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    selectedTransactionDetails["transaction-category"] == 3
+                        ? Column(
+                            children: [
+                              SizedBox(height: 32.0),
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  final dashCount =
+                                      (constraints.maxWidth / (4 + 4)).floor();
+
+                                  return Row(
+                                    children: List.generate(dashCount, (_) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(right: 4),
+                                        child: SizedBox(
+                                          width: 4,
+                                          height: 0.5,
+                                          child: DecoratedBox(
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF1E1E1E),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 32.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Item",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF6B6B6B),
+                                    ),
+                                  ),
+                                  Text(
+                                    "${(selectedTransactionDetails["product"] as Map<String, dynamic>)["title"]}",
+                                    textAlign: TextAlign.end,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 24.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Seller",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF6B6B6B),
+                                    ),
+                                  ),
+                                  Text(
+                                    "${(selectedTransactionDetails["product"] as Map<String, dynamic>)["seller"]}",
+                                    textAlign: TextAlign.end,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 24.0),
+                              selectedTransactionDetails["transaction-category"] ==
+                                      3
+                                  ? SizedBox.shrink()
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Commitment Fee (10%)",
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14.0,
+                                            color: Color(0xFF6B6B6B),
+                                          ),
+                                        ),
+                                        Text(
+                                          "${formatNaira(selectedTransactionDetails["transaction-amount"] as int)} in escrow",
+                                          textAlign: TextAlign.end,
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14.0,
+                                            color: Color(0xFF1A1A1A),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              selectedTransactionDetails["transaction-category"] ==
+                                      3
+                                  ? SizedBox.shrink()
+                                  : SizedBox(height: 24.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Bid",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF6B6B6B),
+                                    ),
+                                  ),
+                                  Text(
+                                    formatNaira(
+                                      (selectedTransactionDetails["product"]
+                                          as Map<String, dynamic>)["bid"],
+                                    ),
+                                    textAlign: TextAlign.end,
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14.0,
+                                      color: Color(0xFF1A1A1A),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Transaction Details Screen | End
+
+// Fund Wallet Screen | Start
+
+class FundWalletScreen extends StatelessWidget {
+  const FundWalletScreen({super.key});
+
+  String formatNaira(int amount) {
+    if (amount >= 1_000_000) {
+      final value = amount / 1_000_000;
+
+      final formatted = value % 1 == 0
+          ? value.toInt().toString()
+          : value.toStringAsFixed(1);
+
+      return '₦${formatted}m';
+    }
+
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return '₦${formatter.format(amount)}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              disabledBackgroundColor: Color(0xFFEEEEEE),
+              disabledForegroundColor: Color(0xFFA5A5A5),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: () {},
+            child: Text(
+              "Continue",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0).copyWith(top: 40.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Fund Wallet",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24.0,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  "Enter the amount you want to add to your wallet.",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.0,
+                    color: Color(0xFF6B6B6B),
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                TextField(
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                    color: Color(0xFF1E1E1E),
+                  ),
+                  cursorColor: Color(0xFF1E1E1E),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "0.00",
+                    hintStyle: GoogleFonts.inter(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
+                      color: Color(0xFFA5A5A5),
+                    ),
+
+                    prefixText: "₦",
+                    prefixStyle: GoogleFonts.inter(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.0,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFF1E1E1E),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(5000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(10000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(50000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(100000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(500000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(1000000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 40.0),
+
+                Text(
+                  "Select Payment Method",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.0,
+                    color: Color(0xFF1B1B1B),
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFE5E5E5),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset("assets/icons/PBA_card.svg"),
+                              SizedBox(width: 12.0),
+                              Text(
+                                "Pay with card",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15.0,
+                                  color: Color(0xFF1B1B1B),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Radio(value: true),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFE5E5E5),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/google_pay_icon.svg",
+                              ),
+                              SizedBox(width: 12.0),
+                              Text(
+                                "Google Pay",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15.0,
+                                  color: Color(0xFF1B1B1B),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Radio(value: true),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFE5E5E5),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/apple_pay_icon.svg",
+                              ),
+                              SizedBox(width: 12.0),
+                              Text(
+                                "Apple Pay",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15.0,
+                                  color: Color(0xFF1B1B1B),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Radio(
+                            value: false,
+                            toggleable: true,
+                          ), // TODO: Implement Radio Function
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Fund Wallet Screen | End
+
+// Withdraw Funds Screen. | Start
+
+class WithdrawFundScreen extends StatelessWidget {
+  const WithdrawFundScreen({super.key});
+
+  String formatNaira(int amount) {
+    if (amount >= 1_000_000) {
+      final value = amount / 1_000_000;
+
+      final formatted = value % 1 == 0
+          ? value.toInt().toString()
+          : value.toStringAsFixed(1);
+
+      return '₦${formatted}m';
+    }
+
+    final formatter = NumberFormat('#,##0', 'en_US');
+    return '₦${formatter.format(amount)}';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: EdgeInsetsGeometry.all(16.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF000000),
+              foregroundColor: Color(0xFFFFFFFF),
+              disabledBackgroundColor: Color(0xFFEEEEEE),
+              disabledForegroundColor: Color(0xFFA5A5A5),
+              padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+            ),
+            onPressed: () {},
+            child: Text(
+              "Withdraw Funds",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            //TODO:Implement back function
+          },
+          icon: SvgPicture.asset("assets/icons/PBA_chevron.svg"),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(16.0).copyWith(top: 40.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Withdraw Funds",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24.0,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  "Enter the amount you want to withdraw.",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15.0,
+                    color: Color(0xFF6B6B6B),
+                  ),
+                ),
+                SizedBox(height: 32.0),
+                TextField(
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.0,
+                    color: Color(0xFF1E1E1E),
+                  ),
+                  cursorColor: Color(0xFF1E1E1E),
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: "0.00",
+                    hintStyle: GoogleFonts.inter(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.0,
+                      color: Color(0xFFA5A5A5),
+                    ),
+
+                    prefixText: "₦",
+                    prefixStyle: GoogleFonts.inter(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.0,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFF1E1E1E),
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+
+                      borderSide: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFFE5E5E5),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(5000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(10000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(50000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(100000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(500000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 24.0),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(10.0),
+
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          border: Border.all(
+                            color: Color(0xFFE5E5E5),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            formatNaira(1000000),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14.0,
+                              color: Color(0xFF1A1A1A),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 40.0),
+
+                Text(
+                  "Select Recipient",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.0,
+                    color: Color(0xFF1B1B1B),
+                  ),
+                ),
+
+                SizedBox(height: 16.0),
+                Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xFFE5E5E5),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [Text("0094108831"), Text("First Bank")],
+                          ),
+                          Text("Okorometa Japheth"),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Withdraw Funds Screen. | End

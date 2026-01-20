@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_gen: ^5.12.0
   flutter_svg: ^2.2.3
   google_fonts: ^6.3.3
   intl: ^0.20.2
@@ -18,6 +19,13 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  build_runner: ^2.10.5
+  flutter_gen_runner: ^5.12.0
+
+flutter_gen:
+  colors:
+    inputs:
+      - assets/colors/colors.xml
 
 flutter:
   uses-material-design: true
@@ -25,6 +33,7 @@ flutter:
     - assets/icons/
     - assets/icons/filter_categories_icons/
     - assets/icons/my_bids/
+    - assets/icons/transaction_icons/
     - assets/illustrations/
     - assets/logos/
     - assets/dummy/

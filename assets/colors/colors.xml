@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- PBA Text Colors -->
+    <color name="pba_text_primary">#1A1A1A</color>
+    <color name="pba_text_secondary">#6B6B6B</color>
+    <color name="pba_text_inactive">#A5A5A5</color>
+
+    <!-- PBA Brand Colors -->
+    <color name="pba_black">#000000</color>
+    <color name="pba_black_accent">#1E1E1E</color>
+    <color name="pba_white">#FFFFFF</color>
+    <color name="pba_inactive">#EEEEEE</color>
+    <color name="pba_outline">#E5E5E5</color>
+    <color name="pba_grey_bg">#F5F5F5</color>
+
+    <!-- PBA Brand Tertiary Colors -->
+    <color name="pba_brand_tertiary_50">#EAEFFC</color>
+    <color name="pba_brand_tertiary_100">#BECDF4</color>
+    <color name="pba_brand_tertiary_200">#9EB4EF</color>
+    <color name="pba_brand_tertiary_300">#7292E8</color>
+    <color name="pba_brand_tertiary_400">#577DE3</color>
+    <color name="pba_brand_tertiary_500">#2D5DDC</color>
+    <color name="pba_brand_tertiary_600">#2955C8</color>
+    <color name="pba_brand_tertiary_700">#20429C</color>
+    <color name="pba_brand_tertiary_800">#193379</color>
+    <color name="pba_brand_tertiary_900">#13275C</color>
+
+        <!-- PBA Brand Accent Colors -->
+    <color name="pba_brand_accent_50">#F9FEEB</color>
+    <color name="pba_brand_accent_100">#EDFAC2</color>
+    <color name="pba_brand_accent_200">#E4F8A5</color>
+    <color name="pba_brand_accent_300">#D7F57C</color>
+    <color name="pba_brand_accent_400">#D0F362</color>
+    <color name="pba_brand_accent_500">#C4F03B</color>
+    <color name="pba_brand_accent_600">#B2DA36</color>
+    <color name="pba_brand_accent_700">#8BAA2A</color>
+    <color name="pba_brand_accent_800">#6C8420</color>
+    <color name="pba_brand_accent_900">#526519</color>
+
+        <!-- PBA State Success Colors -->
+    <color name="pba_states_success_50">#E8F6ED</color>
+    <color name="pba_states_success_100">#B7E2C7</color>
+    <color name="pba_states_success_200">#94D5AC</color>
+    <color name="pba_states_success_300">#63C186</color>
+    <color name="pba_states_success_400">#45B56E</color>
+    <color name="pba_states_success_500">#16A34A</color>
+    <color name="pba_states_success_600">#149443</color>
+    <color name="pba_states_success_700">#107435</color>
+    <color name="pba_states_success_800">#0C5A29</color>
+    <color name="pba_states_success_900">#09441F</color>
+
+            <!-- PBA State Warning Colors -->
+    <color name="pba_states_warning_50">#FDF7E6</color>
+    <color name="pba_states_warning_100">#F8E7B2</color>
+    <color name="pba_states_warning_200">#F5DC8D</color>
+    <color name="pba_states_warning_300">#F1CC5A</color>
+    <color name="pba_states_warning_400">#EEC239</color>
+    <color name="pba_states_warning_500">#EAB308</color>
+    <color name="pba_states_warning_600">#D5A307</color>
+    <color name="pba_states_warning_700">#A67F06</color>
+    <color name="pba_states_warning_800">#816204</color>
+    <color name="pba_states_warning_900">#624B03</color>
+
+            <!-- PBA State Error Colors -->
+    <color name="pba_states_error_50">#FCE9E9</color>
+    <color name="pba_states_error_100">#F4BCBC</color>
+    <color name="pba_states_error_200">#EF9B9B</color>
+    <color name="pba_states_error_300">#E86E6E</color>
+    <color name="pba_states_error_400">#E35151</color>
+    <color name="pba_states_error_500">#DC2626</color>
+    <color name="pba_states_error_600">#C82323</color>
+    <color name="pba_states_error_700">#9C1B1B</color>
+    <color name="pba_states_error_800">#791515</color>
+    <color name="pba_states_error_900">#5C1010</color>
+
+
+
+</resources>
