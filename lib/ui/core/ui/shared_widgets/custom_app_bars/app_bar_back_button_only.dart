@@ -4,7 +4,8 @@ import 'package:flutter_svg/svg.dart';
 
 class AppBarBackButtonOnly extends StatelessWidget
     implements PreferredSizeWidget {
-  const AppBarBackButtonOnly({super.key});
+  final VoidCallback? onPressedBackButton;
+  const AppBarBackButtonOnly({super.key, this.onPressedBackButton});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -13,10 +14,12 @@ class AppBarBackButtonOnly extends StatelessWidget
   Widget build(BuildContext context) {
     return AppBar(
       leading: IconButton(
-        onPressed: () {
-          //TODO:Implement back function
-          Navigator.pop(context);
-        },
+        onPressed:
+            onPressedBackButton ??
+            () {
+              //TODO:Implement back function
+              Navigator.pop(context);
+            },
         icon: SvgPicture.asset(Assets.icons.pBAChevron),
       ),
     );

@@ -1,63 +1,50 @@
-import 'package:auctave_mobile_app/gen/colors.gen.dart';
-import 'package:auctave_mobile_app/ui/core/constants/app_strings/sign_up_strings.dart';
-import 'package:auctave_mobile_app/ui/core/constants/app_text_style.dart';
-import 'package:auctave_mobile_app/ui/core/ui/shared_widgets/app_text_fields.dart/app_text_fields.dart';
+import 'package:auctave_mobile_app/ui/authentication/sign_up/view_model/sign_up_screen_view_model.dart';
+import 'package:auctave_mobile_app/ui/authentication/sign_up/widgets/sign_up_widgets.dart';
 import 'package:auctave_mobile_app/ui/core/ui/shared_widgets/custom_app_bars/app_bar_back_button_only.dart';
 import 'package:auctave_mobile_app/ui/core/ui/shared_widgets/shared_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
-}
-
-class _SignUpScreenState extends State<SignUpScreen> {
-  bool isPasswordVisible = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarBackButtonOnly(),
-      bottomNavigationBar: AppBottomButtonTermsAndPrivacy(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: Text(SignUpStrings.createAccountButton),
+    SignUpScreenViewModel viewModel = context.watch<SignUpScreenViewModel>();
+    SignUpScreenViewModel viewModelAction = context
+        .read<SignUpScreenViewModel>();
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        appBar: AppBarBackButtonOnly(
+          onPressedBackButton: () {
+            if (viewModel.shouldExit == true) {
+              Navigator.pop(context);
+            } else {
+              viewModelAction.moveToPreviousPage();
+            }
+          },
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
+        bottomNavigationBar: AppBottomButtonTermsAndPrivacy(
+          child: ElevatedButton(
+            onPressed: viewModelAction.proceed,
+            child: Text(viewModel.viewButtonText),
+          ),
+        ),
+        body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(16.0).copyWith(top: 40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  SignUpStrings.welcomeToAuctave,
-                  style: AppTextStyle.kPBA24pxMedium.copyWith(
-                    color: ColorName.pbaTextPrimary,
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  SignUpStrings.createAnAccount,
-                  style: AppTextStyle.kPBA15pxRegular.copyWith(
-                    color: ColorName.pbaTextSecondary,
-                  ),
-                ),
-                SizedBox(height: 24.0),
-                AppTextField(
-                  label: SignUpStrings.textFieldLabelFullName,
-                  hint: SignUpStrings.textFieldHintFullName,
-                ),
-                AppTextField(
-                  label: SignUpStrings.textFieldLabelEmailAddress,
-                  hint: SignUpStrings.textFieldHintEmailAddress,
-                ),
-                // Password
-                AppPasswordTextField(),
-              ],
+            child: Expanded(
+              child: PageView(
+                controller: viewModel.pageController,
+                onPageChanged: viewModelAction.updateSlideIndex,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  PersonalDetailsSignUpScreen(),
+                  VerifyPhoneNumberSignUpScreen(),
+                  VerifyOTPSignUpScreen(),
+                ],
+              ),
             ),
           ),
         ),
