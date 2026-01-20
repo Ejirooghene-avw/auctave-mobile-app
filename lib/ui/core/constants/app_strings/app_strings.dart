@@ -4,4 +4,8 @@ class AppStrings {
   static const String termsOfServiceClickableText = "Terms of Service";
   static const String and = "and";
   static const String privacyPolicyClickableText = "Privacy Policy";
+
+  // password Text Field
+  static const defaultPasswordTextFieldLabel = "Password";
+  static const defaultPasswordTextFieldHint = "***********";
 }
