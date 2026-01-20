@@ -17,6 +17,7 @@ class OnboardingStrings {
 
   static const String onboardingSlideButtonNext = "Next";
   static const String onboardingSlideButtonSignUp = "Sign Up";
+  static const String onboardingSkipButton = "Skip";
 
   static final List<Map<String, String>> slideContent = [
     {

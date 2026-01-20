@@ -1,4 +1,6 @@
 import 'package:auctave_mobile_app/gen/colors.gen.dart';
+import 'package:auctave_mobile_app/routing/app_routes.dart';
+import 'package:auctave_mobile_app/ui/core/constants/app_strings/onboarding_strings.dart';
 import 'package:auctave_mobile_app/ui/core/constants/app_text_style.dart';
 import 'package:auctave_mobile_app/ui/onboarding/view_model/onboarding_screen_view_model.dart';
 import 'package:flutter/material.dart';
@@ -14,16 +16,16 @@ class OnboardingSkipButton extends StatelessWidget {
     ) {
       return viewModel.isNextPageAvailable;
     });
-    if (isNextPageAvailable == true) {
+    if (isNextPageAvailable == false) {
       return SizedBox.shrink();
     }
 
     return GestureDetector(
       onTap: () {
-        // TODO: implement skip function
+        Navigator.pushNamed(context, AppRoutes.signIn);
       },
       child: Text(
-        "Skip",
+        OnboardingStrings.onboardingSkipButton,
 
         style: AppTextStyle.kPBA14pxMedium.copyWith(color: ColorName.pbaBlack),
       ),

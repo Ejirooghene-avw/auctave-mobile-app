@@ -14,7 +14,8 @@ class OnboardingViewProgressIndicator extends StatelessWidget {
       children: List.generate(viewModel.numberOfViews, (index) {
         bool isCurrentSlideSameAsIndex = viewModel.slideIndex == index;
         bool isCurrentSlideGreaterThanIndex =
-            (viewModel.slideIndex > index) && (viewModel.slideIndex != 0);
+            (viewModel.slideIndexDisplay > index) &&
+            (viewModel.slideIndex != 0);
         return OnboardingViewProgressIndicatorCell(
           isCurrentSlideSameAsIndex: isCurrentSlideSameAsIndex,
           isCurrentSlideGreaterThanIndex: isCurrentSlideGreaterThanIndex,
