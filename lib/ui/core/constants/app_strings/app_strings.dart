@@ -5,7 +5,17 @@ class AppStrings {
   static const String and = "and";
   static const String privacyPolicyClickableText = "Privacy Policy";
 
-  // password Text Field
-  static const defaultPasswordTextFieldLabel = "Password";
-  static const defaultPasswordTextFieldHint = "***********";
+  //  Text Field
+  static const String textFieldLabelFullName = "Full Name";
+  static const String textFieldLabelEmailAddress = "Email Address";
+  static const String textFieldLabelPassword = "Password";
+  static const String textFieldLabelPhoneNumber = "Phone Number";
+
+  static const String textFieldHintFullName = "Enter your full name";
+  static const String textFieldHintEmailAddress = "Enter your email address";
+  static const String textFieldHintPassword = "***********";
+  static const String textFieldHintPhoneNumber = "Enter your phone number";
+
+  // buttons
+  static const String loginButton = "Log In";
 }

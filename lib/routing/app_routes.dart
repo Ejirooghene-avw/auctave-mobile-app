@@ -1,4 +1,5 @@
 import 'package:auctave_mobile_app/main.dart';
+import 'package:auctave_mobile_app/ui/authentication/login/view/login_screen.dart';
 import 'package:auctave_mobile_app/ui/authentication/sign_in/view/sign_in_screen.dart';
 import 'package:auctave_mobile_app/ui/authentication/sign_up/view/sign_up_screen.dart';
 import 'package:auctave_mobile_app/ui/onboarding/view/onboarding_screen.dart';
@@ -28,6 +29,8 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const SignInScreen());
       case signUp:
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
+      case logIn:
+        return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       default:
         return MaterialPageRoute(

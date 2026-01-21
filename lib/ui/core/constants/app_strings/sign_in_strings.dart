@@ -9,7 +9,6 @@ class SignInStrings {
   static const String signButtonLabelFacebook = "Continue with Facebook";
 
   static const String alreadyHaveAnAccount = "Already have an account?";
-  static const String loginButton = "Log In";
 
   static const String signUpForAuctave = "Sign up for Auctave";
 

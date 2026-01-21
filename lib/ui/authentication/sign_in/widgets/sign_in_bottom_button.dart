@@ -1,4 +1,5 @@
 import 'package:auctave_mobile_app/routing/app_routes.dart';
+import 'package:auctave_mobile_app/ui/core/constants/app_strings/app_strings.dart';
 import 'package:auctave_mobile_app/ui/core/constants/app_strings/sign_in_strings.dart';
 import 'package:auctave_mobile_app/ui/core/constants/app_text_style.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class SignInScreenBottomButton extends StatelessWidget {
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.logIn);
           },
-          child: Text(SignInStrings.loginButton),
+          child: Text(AppStrings.loginButton),
         ),
       ],
     );

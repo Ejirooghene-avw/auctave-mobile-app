@@ -10,8 +10,8 @@ class AppPasswordTextField extends StatefulWidget {
 
   const AppPasswordTextField({
     super.key,
-    this.label = AppStrings.defaultPasswordTextFieldLabel,
-    this.hint = AppStrings.defaultPasswordTextFieldHint,
+    this.label = AppStrings.textFieldLabelPassword,
+    this.hint = AppStrings.textFieldHintPassword,
     this.editingController,
   });
 

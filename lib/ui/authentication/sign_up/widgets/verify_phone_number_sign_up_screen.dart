@@ -1,4 +1,5 @@
 import 'package:auctave_mobile_app/gen/colors.gen.dart';
+import 'package:auctave_mobile_app/ui/core/constants/app_strings/app_strings.dart';
 import 'package:auctave_mobile_app/ui/core/constants/app_strings/sign_up_strings.dart';
 import 'package:auctave_mobile_app/ui/core/constants/app_text_style.dart';
 import 'package:auctave_mobile_app/ui/core/ui/shared_widgets/app_text_fields.dart/app_text_fields.dart';
@@ -29,8 +30,8 @@ class VerifyPhoneNumberSignUpScreen extends StatelessWidget {
           ),
           SizedBox(height: 24.0),
           AppTextField(
-            label: SignUpStrings.textFieldLabelPhoneNumber,
-            hint: SignUpStrings.textFieldHintPhoneNumber,
+            label: AppStrings.textFieldLabelPhoneNumber,
+            hint: AppStrings.textFieldHintPhoneNumber,
           ),
         ],
       ),
